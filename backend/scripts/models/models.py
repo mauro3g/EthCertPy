@@ -1,6 +1,9 @@
 from sqlalchemy import String, Integer, Column
 
 from database.database import Base
+from pydantic import BaseModel
+
+#DB Models
 
 class Users(Base):
     __tablename__="users"
@@ -21,5 +24,52 @@ class Course(Base):
     idcourse = Column(Integer, primary_key=True, index=True)
     title = Column(String(32))
     description = Column(String(50))
+    institution = Column(String(32))
     duration = Column(String(32))
     date = Column(String(32))
+    
+#POJO
+
+class Login(BaseModel):
+    user:str
+    password: str
+    
+class InputUser(BaseModel):
+    user:str
+    password: str
+
+class InputStudent(BaseModel):
+    name:str
+    surname: str
+    dni:str
+
+class InputStudent2(BaseModel):
+    idstudent:int
+    name:str
+    surname: str
+    dni:str
+
+class InputCourse(BaseModel):
+    title:str
+    description:str
+    institution:str
+    duration:str
+    date:str
+
+class InputCourse2(BaseModel):
+    idcourse:int
+    title:str
+    description:str
+    institution:str
+    duration:str
+    date:str
+
+
+class InputCertificate(BaseModel):
+    idcertificate:int
+    issuedDate: int
+    expireDate: int
+    link: str
+    hash: str
+    student:InputStudent
+    course: InputCourse
