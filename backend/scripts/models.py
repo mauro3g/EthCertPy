@@ -1,6 +1,6 @@
 from sqlalchemy import String, Integer, Column
 
-from database.database import Base
+from backend.scripts.database import Base
 from pydantic import BaseModel
 
 #DB Models

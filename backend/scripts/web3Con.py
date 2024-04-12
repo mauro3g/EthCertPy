@@ -21,7 +21,7 @@ def getCertificateContract():
         print("Connection Failed")
 
     # Reading JSON data from a file
-    with open('./build/deployed.json', 'r') as f:
+    with open('./backend/build/deployed.json', 'r') as f:
         contract_data = json.load(f)
 
     # Extract ABI and address for the 'Certificate' contract
@@ -37,18 +37,5 @@ def getCertificateContract():
     print("Contract:", certificate_contract)
     
     return certificate_contract
-
-    # addCert = certificate_contract.functions.addCertificate(
-    #     123,
-    #     456,
-    #     "cert1.com",
-    #     "ASDAS123",
-    #     [2,"jaime","lopez","1756984569"],
-    #     ["java junior","curso de java","espe","6 meses","2024"]
-    # ).transact({"from": caller})
-
-    # certlist = certificate_contract.functions.getAllCertificates().call()
-    # print("-----Certificates List-----")
-    # print(certlist)
 
 
