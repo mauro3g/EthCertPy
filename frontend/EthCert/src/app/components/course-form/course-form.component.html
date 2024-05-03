@@ -1,1 +1,28 @@
-<p>course-form works!</p>
+<div class="modal-body">
+    <form [formGroup]="formCourse">
+        <div class="flex flex-column gap-2 mb-4">
+            <label htmlFor="title" class="form-label">Título</label>
+            <input type="text" pInputText class="form-control" id="title" placeholder="" formControlName="title">
+        </div>
+        <div class="flex flex-column gap-2 mb-4">
+            <label htmlFor="description" class="form-label">Descripción</label>
+            <input type="text" pInputText class="form-control" id="description" placeholder="" formControlName="description">
+        </div>
+        <div class="flex flex-column gap-2 mb-4">
+            <label htmlFor="institution" class="form-label">Institución</label>
+            <input type="text" pInputText class="form-control" id="institution" placeholder="" formControlName="institution">
+        </div>
+        <div class="flex flex-column gap-2 mb-4">
+            <label htmlFor="duration" class="form-label">Duración</label>
+            <input type="text" pInputText class="form-control" id="duration" placeholder="" formControlName="duration">
+        </div>
+        <div class="flex flex-column gap-2 mb-4">
+            <label htmlFor="date" class="form-label">Fecha</label>
+            <p-calendar formControlName="date" class="form-control" id="date"></p-calendar>
+        </div>
+
+    </form>
+</div>
+<div class="modal-footer">
+    <p-button label="Registrar" [loading]="config.data.loading" (click)="submit()" [disabled]="formCourse.invalid"></p-button>
+</div>

@@ -1,1 +1,43 @@
-<p>certificate-form works!</p>
+<div class="modal-body">
+    <form [formGroup]="formCertificate">
+        <div class="flex flex-column gap-2 mb-4">
+            <label htmlFor="students" class="form-label">Estudiante</label>
+            <p-dropdown [options]="students" formControlName="student" optionLabel="dni" [filter]="true"
+                autoWidth="false" [style]="{'width':'100%'}" [(ngModel)]="selectedStudent">
+                <ng-template pTemplate="selectedItem">
+                    <div>{{selectedStudent?.dni}} | {{selectedStudent?.name}} {{selectedStudent?.surname}}</div>
+                </ng-template>
+
+                <ng-template let-dataStudent pTemplate="item">
+                    <div class="item">
+                        <div>{{dataStudent?.dni}} | {{dataStudent?.name}} {{dataStudent?.surname}}</div>
+                    </div>
+                </ng-template>
+            </p-dropdown>
+        </div>
+        <div class="flex flex-column gap-2 mb-4">
+            <label htmlFor="course" class="form-label">Curso</label>
+            <p-dropdown [options]="courses" formControlName="course" optionLabel="title" [filter]="true"
+                autoWidth="false" [style]="{'width':'100%'}" [(ngModel)]="selectedCourse">
+                <ng-template pTemplate="selectedItem">
+                    <div>{{selectedCourse?.title}} | {{selectedCourse?.description}} | {{selectedCourse?.date}}</div>
+                </ng-template>
+
+                <ng-template let-data pTemplate="item">
+                    <div class="item">
+                        <div>{{data?.title}} | {{data?.description}} | {{data?.date}}</div>
+                    </div>
+                </ng-template>
+            </p-dropdown>
+        </div>
+        <div class="flex flex-column gap-2 mb-4">
+            <label htmlFor="expireDate" class="form-label">Fecha de expiracion</label>
+            <p-calendar formControlName="expireDate" class="form-control" id="expireDate"></p-calendar>
+        </div>
+
+    </form>
+</div>
+<div class="modal-footer">
+    <p-button label="Registrar" [loading]="config.data.loading" (click)="submit()"
+        [disabled]="formCertificate.invalid"></p-button>
+</div>

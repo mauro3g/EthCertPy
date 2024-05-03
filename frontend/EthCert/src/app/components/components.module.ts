@@ -7,6 +7,7 @@ import { CourseFormComponent } from './course-form/course-form.component';
 import { CertificateListComponent } from './certificate-list/certificate-list.component';
 import { CertificateFormComponent } from './certificate-form/certificate-form.component';
 import { PrimengModule } from '../modules/primeng/primeng.module';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,7 @@ import { PrimengModule } from '../modules/primeng/primeng.module';
     CertificateListComponent,
     CertificateFormComponent,
   ],
-  imports: [CommonModule, PrimengModule],
+  imports: [CommonModule, PrimengModule, ReactiveFormsModule, FormsModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   exports: [
     StudentsListComponent,

@@ -1,1 +1,20 @@
-<p>students-form works!</p>
+<div class="modal-body">
+    <form [formGroup]="formStudent">
+        <div class="flex flex-column gap-2 mb-4">
+            <label htmlFor="name" class="form-label">Nombre</label>
+            <input type="text" pInputText class="form-control" id="name" placeholder="" formControlName="name">
+        </div>
+        <div class="flex flex-column gap-2 mb-4">
+            <label htmlFor="surname" class="form-label">Apellido</label>
+            <input type="text" pInputText class="form-control" id="surname" placeholder="" formControlName="surname">
+        </div>
+        <div class="flex flex-column gap-2 mb-4">
+            <label htmlFor="dni" class="form-label">Identificacion</label>
+            <input type="text" pInputText class="form-control" id="dni" placeholder="" formControlName="dni">
+        </div>
+
+    </form>
+</div>
+<div class="modal-footer">
+    <p-button label="Registrar" [loading]="config.data.loading" (click)="submit()" [disabled]="formStudent.invalid"></p-button>
+</div>

@@ -1,1 +1,31 @@
-<p>certificate-list works!</p>
+<div class="card">
+    <p-table [value]="certificates" (sortFunction)="customSort($event)" [customSort]="true"
+        [tableStyle]="{'min-width': '60rem'}">
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="idcertificate" style="width:20%">id <p-sortIcon field="idcertificate"></p-sortIcon>
+                </th>
+                <th pSortableColumn="issuedDate" style="width:20%">Emitido <p-sortIcon field="issuedDate"></p-sortIcon>
+                </th>
+                <th pSortableColumn="expireDate" style="width:20%">Expira <p-sortIcon field="expireDate"></p-sortIcon>
+                </th>
+                <th pSortableColumn="link" style="width:20%">Link <p-sortIcon field="link"></p-sortIcon></th>
+                <th pSortableColumn="hash" style="width:20%">Hash <p-sortIcon field="hash"></p-sortIcon></th>
+                <th pSortableColumn="student" style="width:20%">Estudiante <p-sortIcon field="student"></p-sortIcon>
+                </th>
+                <th pSortableColumn="course" style="width:20%">Curso <p-sortIcon field="course"></p-sortIcon></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-certificate>
+            <tr>
+                <td>{{certificate.idcertificate}}</td>
+                <td>{{certificate.issuedDate}}</td>
+                <td>{{certificate.expireDate}}</td>
+                <td>{{certificate.link}}</td>
+                <td>{{certificate.hash}}</td>
+                <td>{{certificate.student.name + " " + certificate.student.surname}}</td>
+                <td>{{certificate.course.title}}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

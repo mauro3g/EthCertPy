@@ -18,7 +18,7 @@ export interface ICourse {
   description: string;
   institution: string;
   duration: string;
-  date: string;
+  date: string | Date;
 }
 
 export interface ILogin {
@@ -35,3 +35,4 @@ export interface ICertificate {
   student: IStudent;
   course: ICourse;
 }
+
