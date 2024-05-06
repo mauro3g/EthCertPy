@@ -27,7 +27,7 @@ struct CertificateData {
     uint256 issuedDate;
     uint256 expireDate;
     string link;
-    string hash;
+    string hashCertificate;
     Student student;
     Course course;
 }
@@ -35,7 +35,7 @@ struct CertificateData {
 contract Certificate {
     CertificateData[] certificates;
     //maps from cerrtificate identificator to certificate array position
-    mapping(uint256 => uint256) position;
+    mapping(string => uint256) position;
 
     constructor() {}
 
@@ -66,13 +66,13 @@ contract Certificate {
             _course
         );
         certificates.push(newCertificate);
-        position[nextId] = certificates.length - 1;
+        position[_hash] = certificates.length - 1;
     }
 
     function getCertificateById(
-        uint256 certId
+        string memory _hash
     ) external view returns (CertificateData memory) {
-        uint256 certIndex = position[certId];
+        uint256 certIndex = position[_hash];
         return certificates[certIndex];
     }
 }

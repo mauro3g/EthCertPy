@@ -71,5 +71,5 @@ class InputCertificate(BaseModel):
     expireDate: int
     link: str
     hash: str
-    student:InputStudent
+    student:InputStudent2
     course: InputCourse

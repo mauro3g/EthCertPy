@@ -1,11 +1,11 @@
 sudo /opt/lampp/manager-linux-x64.run
 
-sudo ./ganache.AppImage (downloads)
+sudo ./ganache.AppImage (en downloads)
 
 http://localhost/phpmyadmin/
 
 http://127.0.0.1:8000/docs#/default/ //documentacion de servicios openapi
 
-sudo brownie run scripts/deploy //busca una main fution y la ejecuta, es para desplegar los contratos !SOLO SI ES NECESARIO
+sudo brownie run scripts/deploy (cd backend)//busca una main fution y la ejecuta, es para desplegar los contratos !SOLO SI ES NECESARIO
 
 uvicorn backend.scripts.main:app --reload //ejecuta el servicio rest y conecta con db y blockchain
