@@ -17,7 +17,7 @@ export class ValidateComponent {
     private readonly certificateService: CertificatesServiceService
   ) {}
 
-  handleSearch(search: any) {
+  handleSearch(search: string) {
     console.log(search)
     this.loading.next(true);
     this.certificateService
