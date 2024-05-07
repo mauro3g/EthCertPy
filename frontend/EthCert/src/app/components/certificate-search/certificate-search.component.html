@@ -1,6 +1,6 @@
 <div class="search">
     <form [formGroup]="formSearch">
-        <input type="text" pInputText placeholder="Ingrese el identificador del certificado" class="w-full" />
+        <input type="text" pInputText placeholder="Ingrese el identificador del certificado" class="w-full" formControlName="searchData" />
     </form>
     <p-button label="Buscar" [loading]="loading" (click)="submit()" [disabled]="formSearch.invalid"></p-button>
 </div>
