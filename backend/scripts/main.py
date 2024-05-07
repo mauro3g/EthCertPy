@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException, Depends, status
+from fastapi.middleware.cors import CORSMiddleware
 from typing import Annotated
 from backend.scripts.database import SessionLocal
 from backend.scripts.models import Users, Student, Course, Login, InputCourse, InputStudent, InputStudent2, InputCertificate 
@@ -8,6 +9,17 @@ from typing import List
 from hashlib import sha1
 
 app = FastAPI()
+
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 certificate_contract = getCertificateContract()
 
 def get_db():
