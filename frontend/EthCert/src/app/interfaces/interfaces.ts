@@ -36,3 +36,7 @@ export interface ICertificate {
   course: ICourse;
 }
 
+export interface ISearch{
+  searchData: string;
+}
+

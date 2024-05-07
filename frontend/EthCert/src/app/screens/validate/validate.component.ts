@@ -1,10 +1,31 @@
 import { Component } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import { ICertificate } from 'src/app/interfaces/interfaces';
+import { CertificatesServiceService } from 'src/app/services/certificates-service.service';
 
 @Component({
   selector: 'app-validate',
   templateUrl: './validate.component.html',
-  styleUrls: ['./validate.component.scss']
+  styleUrls: ['./validate.component.scss'],
 })
 export class ValidateComponent {
+  certificate?: ICertificate;
+  loading = new BehaviorSubject<boolean>(false);
+  showResult = new BehaviorSubject<boolean>(false);
 
+  constructor(
+    private readonly certificateService: CertificatesServiceService
+  ) {}
+
+  handleSearch(search: any) {
+    console.log(search)
+    this.loading.next(true);
+    this.certificateService
+      .get_certificate(search)
+      .subscribe((response: ICertificate[]) => {
+        if (response.length > 0) this.certificate = response[0];
+        this.loading.next(false);
+        this.showResult.next(true);
+      });
+  }
 }

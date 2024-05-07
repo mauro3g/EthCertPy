@@ -1,1 +1,8 @@
-<p>validate works!</p>
+<div class="validate">
+    <div class="validate-title">
+        <img src="../../../assets/ethereum-eth-logo-diamond.svg" height="100" class="mr-2" alt="logo" />
+        <h1>EthCert</h1>
+    </div>
+    <app-certificate-search [loading]="loading.value" (searchCertificate)="handleSearch($event)"></app-certificate-search>
+    <app-certificate-validate *ngIf="showResult.value && !loading.value" [certificate]="certificate"></app-certificate-validate>
+</div>

@@ -38,7 +38,7 @@ export class HomeComponent implements OnInit {
       .get_certificates()
       .subscribe((response: ICertificate[]) => {
         this.certificates = response;
-        console.log(this.certificates)
+        this.showCertificateList()
       });
 
     this.certificateService.get_students().subscribe((response: IStudent[]) => {

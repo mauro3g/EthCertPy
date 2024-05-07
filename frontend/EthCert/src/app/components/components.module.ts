@@ -8,6 +8,9 @@ import { CertificateListComponent } from './certificate-list/certificate-list.co
 import { CertificateFormComponent } from './certificate-form/certificate-form.component';
 import { PrimengModule } from '../modules/primeng/primeng.module';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { LoginFormComponent } from './login-form/login-form.component';
+import { CertificateSearchComponent } from './certificate-search/certificate-search.component';
+import { CertificateValidateComponent } from './certificate-validate/certificate-validate.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +20,9 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
     CourseFormComponent,
     CertificateListComponent,
     CertificateFormComponent,
+    LoginFormComponent,
+    CertificateSearchComponent,
+    CertificateValidateComponent,
   ],
   imports: [CommonModule, PrimengModule, ReactiveFormsModule, FormsModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -27,6 +33,9 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
     CourseFormComponent,
     CertificateListComponent,
     CertificateFormComponent,
+    LoginFormComponent,
+    CertificateSearchComponent,
+    CertificateValidateComponent,
   ],
 })
 export class ComponentsModule {}

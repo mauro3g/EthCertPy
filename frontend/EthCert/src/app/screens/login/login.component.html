@@ -1,1 +1,9 @@
-<p>login works!</p>
+<div class="login">
+    <div class="login-container">
+        <div class="login-title">
+            <img src="../../../assets/ethereum-eth-logo-diamond.svg" height="100" class="mr-2" alt="logo" />
+            <h1>EthCert</h1>
+        </div>
+        <app-login-form (login)="handleLogin($event)" [loading]="loading"></app-login-form>
+    </div>
+</div>

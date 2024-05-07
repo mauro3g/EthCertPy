@@ -47,8 +47,8 @@ export class CertificatesServiceService {
     );
   }
 
-  get_certificate(id: number): Observable<ICertificate> {
-    return this.httpClient.get<ICertificate>(
+  get_certificate(id: string): Observable<ICertificate[]> {
+    return this.httpClient.get<ICertificate[]>(
       this.API_URL + 'certificate' + `/${id}`
     );
   }

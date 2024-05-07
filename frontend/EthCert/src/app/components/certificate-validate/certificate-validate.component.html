@@ -1,0 +1,33 @@
+<div class="validate">
+    <p-card>
+        <h2>{{ certificate?.course?.title}}</h2>
+        <p>{{ certificate?.course?.description}}</p>
+        <div>
+            <span>Conferido a: </span><span>{{ certificate?.student?.name + ' ' + certificate?.student?.surname }}</span>
+        </div>
+        <hr>
+        <div class="validate-issued">
+            <div>
+                <span>Emitido por: </span><span>{{ certificate?.course?.institution }}</span>
+            </div>
+            <div>
+                <span>Duración: </span><span>{{ certificate?.course?.duration }}</span>
+            </div>
+            <div>
+                <span>Fecha de finalización: </span><span>{{ certificate?.course?.date }}</span>
+            </div>
+        </div>
+        <div class="validate-issued">
+            <div>
+                <span>Emitido desde: </span><span>{{ certificate?.issuedDate?.toLocaleString() }}</span>
+            </div>
+            <div>
+                <span>Caducidad: </span><span>{{ certificate?.expireDate?.toLocaleString() }}</span>
+            </div>
+            <div>
+                <span>hash ID </span><span>{{ certificate?.hash }}</span>
+            </div>
+        </div>
+        
+    </p-card>
+</div>

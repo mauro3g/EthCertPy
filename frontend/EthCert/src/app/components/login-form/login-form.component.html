@@ -1,0 +1,17 @@
+<p-card header="Inicio de sesión">
+    <div class="modal-body">
+        <form [formGroup]="formLogin">
+            <div class="flex flex-column gap-2 mb-4">
+                <label htmlFor="user" class="form-label">Usuario</label>
+                <input type="text" pInputText class="form-control" id="user" placeholder="" formControlName="user">
+            </div>
+            <div class="flex flex-column gap-2 mb-4">
+                <label htmlFor="pass" class="form-label">Contraseña</label>
+                <input type="password" pInputText class="form-control" id="pass" placeholder="" formControlName="password">
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <p-button label="Iniciar sesión" [loading]="loading" (click)="submit()" [disabled]="formLogin.invalid"></p-button>
+    </div>
+</p-card>
