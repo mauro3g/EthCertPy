@@ -160,7 +160,7 @@ export class HomeComponent implements OnInit {
   registerCourse(data: ICourse) {
     this.loading.next(true);
     this.certificateService
-      .create_course([data])
+      .create_course(data)
       .subscribe((response: string) => {
         this.loading.next(false);
         console.log(response);
