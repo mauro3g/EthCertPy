@@ -28,6 +28,7 @@ export class CourseFormComponent {
 
   doCreate(body: ICourse) {
     this.config.data.registerData(body);
+    this.ref.close();
   }
 
   submit() {

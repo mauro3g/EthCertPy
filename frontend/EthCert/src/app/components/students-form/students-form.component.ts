@@ -23,6 +23,7 @@ export class StudentsFormComponent {
 
   doCreate(body: IStudent) {
     this.config.data.registerData(body)
+    this.ref.close();
   }
 
   submit() {

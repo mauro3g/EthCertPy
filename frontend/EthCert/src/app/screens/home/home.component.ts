@@ -24,6 +24,8 @@ export class HomeComponent implements OnInit {
   showStudents: boolean = false;
   showCertificates: boolean = false;
   showCourses: boolean = false;
+  showSuccess: boolean = false;
+  showError: boolean = false;
   loading = new BehaviorSubject<boolean>(false);
   loadingTables = new BehaviorSubject<boolean>(true);
 
@@ -34,21 +36,9 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.certificateService
-      .get_certificates()
-      .subscribe((response: ICertificate[]) => {
-        this.certificates = response;
-        this.showCertificateList()
-      });
-
-    this.certificateService.get_students().subscribe((response: IStudent[]) => {
-      this.students = response;
-    });
-
-    this.certificateService.get_courses().subscribe((response: ICourse[]) => {
-      this.courses = response;
-      this.loading.next(false);
-    });
+    this.getCertificates();
+    this.getStudents();
+    this.getCourses();
 
     this.items = [
       {
@@ -147,12 +137,36 @@ export class HomeComponent implements OnInit {
     this.showCourses = false;
   }
 
+  getCertificates() {
+    this.certificateService
+      .get_certificates()
+      .subscribe((response: ICertificate[]) => {
+        this.certificates = response;
+        this.showCertificateList();
+      });
+  }
+
+  getStudents() {
+    this.certificateService.get_students().subscribe((response: IStudent[]) => {
+      this.students = response;
+    });
+  }
+
+  getCourses() {
+    this.certificateService.get_courses().subscribe((response: ICourse[]) => {
+      this.courses = response;
+      this.loading.next(false);
+    });
+  }
+
   registerStudent(data: IStudent) {
     this.loading.next(true);
     this.certificateService
       .create_student([data])
       .subscribe((response: string) => {
         this.loading.next(false);
+        this.getStudents();
+        this.showSuccess = true;
         console.log(response);
       });
   }
@@ -163,6 +177,8 @@ export class HomeComponent implements OnInit {
       .create_course(data)
       .subscribe((response: string) => {
         this.loading.next(false);
+        this.getCourses();
+        this.showSuccess = true;
         console.log(response);
       });
   }
@@ -173,6 +189,8 @@ export class HomeComponent implements OnInit {
       .create_certificate(data)
       .subscribe((response: string) => {
         this.loading.next(false);
+        this.getCertificates();
+        this.showSuccess = true;
         console.log(response);
       });
   }
@@ -187,16 +205,6 @@ export class HomeComponent implements OnInit {
       width: '70%',
       contentStyle: { overflow: 'auto' },
       baseZIndex: 10000,
-    });
-
-    this.ref.onClose.subscribe((student: IStudent) => {
-      if (student) {
-        this.messageService.add({
-          severity: 'info',
-          summary: 'Product Selected',
-          detail: student.name,
-        });
-      }
     });
   }
 
