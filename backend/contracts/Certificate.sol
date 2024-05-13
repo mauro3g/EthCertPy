@@ -37,7 +37,21 @@ contract Certificate {
     //maps from cerrtificate identificator to certificate array position
     mapping(string => uint256) position;
 
-    constructor() {}
+    constructor() {
+        Student memory _student = Student(0,"0","0","0");
+        Course memory _course = Course("0","0","0","0","0");
+        CertificateData memory newCertificate = CertificateData(
+            0,
+            0,
+            0,
+            "0",
+            "0",
+            _student,
+            _course
+        );
+        certificates.push(newCertificate);
+        position["0"] = 0;
+    }
 
     function getAllCertificates()
         external
@@ -55,7 +69,7 @@ contract Certificate {
         Student memory _student,
         Course memory _course
     ) external {
-        uint256 nextId = certificates.length + 1;
+        uint256 nextId = certificates.length;
         CertificateData memory newCertificate = CertificateData(
             nextId,
             _issuedDate,

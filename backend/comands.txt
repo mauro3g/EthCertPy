@@ -9,3 +9,5 @@ http://127.0.0.1:8000/docs#/default/ //documentacion de servicios openapi
 sudo brownie run scripts/deploy (cd backend)//busca una main fution y la ejecuta, es para desplegar los contratos !SOLO SI ES NECESARIO
 
 uvicorn backend.scripts.main:app --reload //ejecuta el servicio rest y conecta con db y blockchain
+
+cd frontend/EthCertPy yarn start
