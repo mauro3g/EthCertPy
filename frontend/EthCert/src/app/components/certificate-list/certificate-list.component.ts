@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { SortEvent } from 'primeng/api';
 import { ICertificate } from 'src/app/interfaces/interfaces';
 
@@ -7,11 +7,18 @@ import { ICertificate } from 'src/app/interfaces/interfaces';
   templateUrl: './certificate-list.component.html',
   styleUrls: ['./certificate-list.component.scss']
 })
-export class CertificateListComponent {
+export class CertificateListComponent implements OnInit{
   @Input() certificates: ICertificate[] = [];
 
   constructor(){
     console.log(this.certificates)
+  }
+
+  ngOnInit(): void {
+    this.certificates.forEach( cert => {
+      cert.issuedDate = new Date(cert.issuedDate).toLocaleDateString();
+      cert.expireDate = new Date(cert.expireDate).toLocaleDateString();
+    })
   }
 
   customSort(event: SortEvent) {

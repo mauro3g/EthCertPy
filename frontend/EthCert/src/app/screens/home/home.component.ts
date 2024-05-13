@@ -141,8 +141,11 @@ export class HomeComponent implements OnInit {
     this.certificateService
       .get_certificates()
       .subscribe((response: ICertificate[]) => {
-        this.certificates = response;
-        this.showCertificateList();
+        if(response.length > 0){
+          response.splice(0,1);
+          this.certificates = response;
+          this.showCertificateList();
+        }
       });
   }
 
