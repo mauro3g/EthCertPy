@@ -41,6 +41,7 @@ export class CertificateFormComponent {
   doCreate(body: ICertificate) {
     console.log(body);
     this.config.data.registerData(body);
+    this.ref.close();
   }
 
   submit() {

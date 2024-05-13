@@ -11,3 +11,8 @@
     <app-certificate-list [certificates]="certificates" *ngIf="showCertificates"></app-certificate-list>
     <p-toast></p-toast>
 </div>
+<p-dialog [(visible)]="showSuccess" position="bottom-right" header="Resultado" [contentStyle]="{ background: 'greenn' }">
+    <p>
+        El registro se ha creado exitosamente.
+    </p>
+</p-dialog>

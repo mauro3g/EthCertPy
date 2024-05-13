@@ -29,7 +29,7 @@ export class CertificatesServiceService {
     return this.httpClient.get<IStudent[]>(this.API_URL + 'student-list');
   }
 
-  create_course(body: ICourse[]): Observable<string> {
+  create_course(body: ICourse): Observable<string> {
     return this.httpClient.post<string>(this.API_URL + 'course', body);
   }
 
