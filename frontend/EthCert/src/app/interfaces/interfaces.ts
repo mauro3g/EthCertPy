@@ -28,8 +28,8 @@ export interface ILogin {
 
 export interface ICertificate {
   idcertificate?: number;
-  issuedDate: number;
-  expireDate: number;
+  issuedDate: number | string;
+  expireDate: number | string;
   link: string;
   hash: string;
   student: IStudent;

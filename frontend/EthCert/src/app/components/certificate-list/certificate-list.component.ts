@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { SortEvent } from 'primeng/api';
 import { ICertificate } from 'src/app/interfaces/interfaces';
 import { DateFormatterUtil } from 'src/app/utils/dateFormatter';
@@ -10,6 +10,13 @@ import { DateFormatterUtil } from 'src/app/utils/dateFormatter';
 })
 export class CertificateListComponent  extends DateFormatterUtil {
   @Input() certificates: ICertificate[] = [];
+
+  ngOnInit(): void {
+    this.certificates.forEach( cert => {
+      cert.issuedDate = new Date(cert.issuedDate).toLocaleDateString();
+      cert.expireDate = new Date(cert.expireDate).toLocaleDateString();
+    })
+  }
 
   customSort(event: SortEvent) {
       event.data?.sort((data1, data2) => {
