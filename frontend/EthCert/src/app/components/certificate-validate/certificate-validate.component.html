@@ -19,14 +19,14 @@
         </div>
         <div class="validate-issued">
             <div>
-                <span>Emitido desde: </span><span>{{ certificate?.issuedDate?.toLocaleString() }}</span>
+                <span>Emitido desde: </span><span>{{ formatDate(certificate?.issuedDate || 0) }}</span>
             </div>
             <div>
-                <span>Caducidad: </span><span>{{ certificate?.expireDate?.toLocaleString() }}</span>
+                <span>Caducidad: </span><span>{{ formatDate(certificate?.expireDate || 0) }}</span>
             </div>
-            <div>
-                <span>hash ID </span><span>{{ certificate?.hash }}</span>
-            </div>
+        </div>
+        <div>
+            <span>hash ID </span><span>{{ certificate?.hash }}</span>
         </div>
         
     </p-card>

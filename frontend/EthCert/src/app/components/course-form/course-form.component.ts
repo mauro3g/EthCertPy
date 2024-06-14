@@ -33,8 +33,10 @@ export class CourseFormComponent {
 
   submit() {
     let dateParse: Date = this.formCourse.value.date;
+    let durationValue: String = this.formCourse.value.duration + ' horas';
     this.doCreate({
       ...this.formCourse.value,
+      duration: durationValue,
       date: dateParse.toLocaleDateString(),
     });
   }

@@ -13,8 +13,8 @@
             <input type="text" pInputText class="form-control" id="institution" placeholder="" formControlName="institution">
         </div>
         <div class="flex flex-column gap-2 mb-4">
-            <label htmlFor="duration" class="form-label">Duración</label>
-            <input type="text" pInputText class="form-control" id="duration" placeholder="" formControlName="duration">
+            <label htmlFor="duration" class="form-label">Duración en horas</label>
+            <p-inputNumber formControlName="duration" mode="decimal" [showButtons]="true" inputId="duration" [min]="0"> </p-inputNumber>
         </div>
         <div class="flex flex-column gap-2 mb-4">
             <label htmlFor="date" class="form-label">Fecha</label>

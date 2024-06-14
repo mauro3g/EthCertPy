@@ -1,18 +1,15 @@
 import { Component, Input } from '@angular/core';
 import { SortEvent } from 'primeng/api';
 import { ICertificate } from 'src/app/interfaces/interfaces';
+import { DateFormatterUtil } from 'src/app/utils/dateFormatter';
 
 @Component({
   selector: 'app-certificate-list',
   templateUrl: './certificate-list.component.html',
   styleUrls: ['./certificate-list.component.scss']
 })
-export class CertificateListComponent {
+export class CertificateListComponent  extends DateFormatterUtil {
   @Input() certificates: ICertificate[] = [];
-
-  constructor(){
-    console.log(this.certificates)
-  }
 
   customSort(event: SortEvent) {
       event.data?.sort((data1, data2) => {
