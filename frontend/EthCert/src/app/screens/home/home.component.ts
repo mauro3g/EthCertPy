@@ -207,6 +207,19 @@ export class HomeComponent implements OnInit {
       });
   }
 
+  uploadStudent(file: File) {
+    console.log('asdas')
+    this.loading.next(true);
+    this.certificateService
+      .upload_students(file)
+      .subscribe((response: string) => {
+        this.loading.next(false);
+        this.getStudents();
+        this.showSuccess = true;
+        console.log(response);
+      });
+  }
+
   registerCourse(data: ICourse) {
     this.loading.next(true);
     this.certificateService
@@ -270,10 +283,9 @@ export class HomeComponent implements OnInit {
     this.ref = this.dialogService.open(StudentsUploadComponent, {
       data: {
         loading: this.loading.value,
-        registerData: (data: IStudent) => this.registerStudent(data),
+        uploadStudent: (data: File) => this.uploadStudent(data),
       },
       header: 'Subir archivo de estudiantes',
-      height: '100%',
       width: '70%',
       contentStyle: { overflow: 'auto' },
       baseZIndex: 10000,
@@ -287,7 +299,6 @@ export class HomeComponent implements OnInit {
         registerData: (data: ICourse) => this.registerCourse(data),
       },
       header: 'Registrar plantilla de curso',
-      height: '80%',
       width: '70%',
       contentStyle: { overflow: 'auto' },
       baseZIndex: 10000,
@@ -303,7 +314,6 @@ export class HomeComponent implements OnInit {
         registerData: (data: ICertificate) => this.registerCertificate(data),
       },
       header: 'Registrar certificado',
-      height: '70%',
       width: '70%',
       contentStyle: { overflow: 'auto' },
       baseZIndex: 10000,
@@ -320,7 +330,6 @@ export class HomeComponent implements OnInit {
         requestReport: (data: IReportRequest) => this.requestReport(data),
       },
       header: 'Descargar reporte en csv',
-      height: '100%',
       width: '70%',
       contentStyle: { overflow: 'auto' },
       baseZIndex: 10000,

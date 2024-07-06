@@ -38,6 +38,7 @@ db_dependency = Annotated[Session, Depends(get_db)]
 def generate_student_course_report(writer, certificates, input_value):
     writer.writerow(["curso", input_value.course])
     writer.writerow(["nombre", "apellido", "dni"])
+    
     for cert in certificates:
         if cert["course"]["title"] == input_value.course:
             writer.writerow([cert["student"]["name"], cert["student"]["surname"], cert["student"]["dni"]])
@@ -46,53 +47,53 @@ def generate_certificate_student_report(writer, certificates, input_value):
     writer.writerow(["estudiante", input_value.student])
     writer.writerow(["id", "emitido", "expira", "hash", "curso", "institucion", "duracion", "nombre", "apellido", "dni"])
     for cert in certificates:
-        if cert.student.dni == input_value.student:
-            date_issued = datetime.fromtimestamp(cert.issuedDate)
-            date_expired = datetime.fromtimestamp(cert.expireDate)
+        if cert["student"]["dni"] == input_value.student:
+            date_issued = datetime.fromtimestamp(cert["issuedDate"])
+            date_expired = datetime.fromtimestamp(cert["expireDate"])
             writer.writerow([
-                cert.idcertificate,
+                cert["idcertificate"],
                 date_issued.strftime("%Y-%m-%d %H:%M:%S"),
                 date_expired.strftime("%Y-%m-%d %H:%M:%S"),
-                cert.hash,
-                cert.course.title,
-                cert.course.institution,
-                cert.course.duration,
-                cert.student.name,
-                cert.student.surname,
-                cert.student.dni
+                cert["hash"],
+                cert["course"]["title"],
+                cert["course"]["institution"],
+                cert["course"]["duration"],
+                cert["student"]["name"],
+                cert["student"]["surname"],
+                cert["student"]["dni"]
             ])
 
 def generate_certificate_course_report(writer, certificates, input_value):
     writer.writerow(["curso", input_value.course])
     writer.writerow(["id", "emitido", "expira", "hash", "curso", "institucion", "duracion", "nombre", "apellido", "dni"])
     for cert in certificates:
-        if cert.course.title == input_value.course:
-            date_issued = datetime.fromtimestamp(cert.issuedDate)
-            date_expired = datetime.fromtimestamp(cert.expireDate)
+        if cert["course"]["title"] == input_value.course:
+            date_issued = datetime.fromtimestamp(cert["issuedDate"])
+            date_expired = datetime.fromtimestamp(cert["expireDate"])
             writer.writerow([
-                cert.idcertificate,
+                cert["idcertificate"],
                 date_issued.strftime("%Y-%m-%d %H:%M:%S"),
                 date_expired.strftime("%Y-%m-%d %H:%M:%S"),
-                cert.hash,
-                cert.course.title,
-                cert.course.institution,
-                cert.course.duration,
-                cert.student.name,
-                cert.student.surname,
-                cert.student.dni
+                cert["hash"],
+                cert["course"]["title"],
+                cert["course"]["institution"],
+                cert["course"]["duration"],
+                cert["student"]["name"],
+                cert["student"]["surname"],
+                cert["student"]["dni"]
             ])
 
 def generate_course_institution_report(writer, certificates, input_value):
     writer.writerow(["institucion", input_value.institution])
     writer.writerow(["curso", "institucion", "duracion", "descripcion", "fecha"])
     for cert in certificates:
-        if cert.course.institution == input_value.institution:
+        if cert["course"]["institution"] == input_value.institution:
             writer.writerow([
-                cert.course.title,
-                cert.course.institution,
-                cert.course.duration,
-                cert.course.description,
-                cert.course.date
+                cert["course"]["title"],
+                cert["course"]["institution"],
+                cert["course"]["duration"],
+                cert["course"]["description"],
+                cert["course"]["date"]
             ])
             
 def transform_certificate_to_json(array):

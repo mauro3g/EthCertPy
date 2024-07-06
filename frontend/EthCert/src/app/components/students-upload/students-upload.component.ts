@@ -1,17 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { MessageService } from 'primeng/api';
+import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { IStudent } from 'src/app/interfaces/interfaces';
 
 @Component({
   selector: 'app-students-upload',
   templateUrl: './students-upload.component.html',
-  styleUrls: ['./students-upload.component.scss'],
-  providers: [MessageService],
+  styleUrls: ['./students-upload.component.scss']
 })
 export class StudentsUploadComponent implements OnInit {
   studentExamples: IStudent[] = [];
 
-  constructor(private messageService: MessageService) {}
+  constructor(
+    public ref: DynamicDialogRef,
+    public config: DynamicDialogConfig
+  ) {}
 
   ngOnInit(): void {
     this.studentExamples.push({
@@ -32,16 +34,10 @@ export class StudentsUploadComponent implements OnInit {
   }
 
   onUpload(event: any) {
-    const file: File = event.target.files[0];
+    const file: File = event.files[0];
 
     if (file) {
-      const formData = new FormData();
-      formData.append('file', file, file.name);
+      this.config.data.uploadStudent(file);
     }
-    this.messageService.add({
-      severity: 'info',
-      summary: 'Success',
-      detail: 'Archivo subido',
-    });
   }
 }

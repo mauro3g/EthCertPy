@@ -14,8 +14,8 @@ import {
 })
 export class CertificatesServiceService {
   //private readonly API_URL = 'http://localhost:8000/';
-  private readonly API_URL =
-    'https://d8cfe026-bdbe-4cff-9d2b-e0402a169485.mock.pstmn.io/';
+  private readonly API_URL = 'http://192.168.56.101:8000/';
+  //private readonly API_URL = 'https://d8cfe026-bdbe-4cff-9d2b-e0402a169485.mock.pstmn.io/';
 
   constructor(private readonly httpClient: HttpClient) {}
 
@@ -25,6 +25,13 @@ export class CertificatesServiceService {
 
   create_student(body: IStudent[]): Observable<string> {
     return this.httpClient.post<string>(this.API_URL + 'student', body);
+  }
+
+  upload_students(file: File): Observable<string> {
+    console.log("upload ser")
+    const formData = new FormData();
+    formData.append('file', file, file.name);
+    return this.httpClient.post<string>(this.API_URL + 'student-upload', formData);
   }
 
   get_students(): Observable<IStudent[]> {
