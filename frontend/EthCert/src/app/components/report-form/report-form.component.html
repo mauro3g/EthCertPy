@@ -48,15 +48,15 @@
         </div>
         <div *ngIf="selectedOption?.id === optionsId.courseInstitution" class="flex flex-column gap-2 mb-4">
             <label htmlFor="institutions" class="form-label">Instituciones</label>
-            <p-dropdown [options]="institutions" formControlName="institution" optionLabel="institution" [filter]="true"
+            <p-dropdown [options]="institutions" formControlName="institution" [filter]="true"
                 autoWidth="false" [style]="{'width':'100%'}" [(ngModel)]="selectedInstitution">
                 <ng-template pTemplate="selectedItem">
                     <div>{{selectedInstitution}}</div>
                 </ng-template>
 
-                <ng-template let-dataInstitution pTemplate="item">
+                <ng-template let-data pTemplate="item">
                     <div class="item">
-                        <div>{{dataInstitution}}</div>
+                        <div>{{data}}</div>
                     </div>
                 </ng-template>
             </p-dropdown>

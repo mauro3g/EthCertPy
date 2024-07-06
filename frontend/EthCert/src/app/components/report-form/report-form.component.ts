@@ -54,7 +54,7 @@ export class ReportFormComponent {
     },
     {
       id: this.optionsId.courseInstitution,
-      title: 'Certificados por Curso',
+      title: 'Instituciones por Curso',
       option: 'course-institution',
     },
   ];
@@ -72,11 +72,11 @@ export class ReportFormComponent {
       institution: new FormControl<string | null>(this.institutions[0], []),
       option: new FormControl<IReportOption | null>(this.reportOptions[0], []),
     });
+    this.extractInstitutions();
     this.selectedStudent = this.students[0];
     this.selectedCourse = this.courses[0];
     this.selectedInstitution = this.institutions[0];
     this.selectedOption = this.reportOptions[0];
-    this.extractInstitutions();
   }
 
   extractInstitutions() {
