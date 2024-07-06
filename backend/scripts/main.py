@@ -1,6 +1,6 @@
 import csv
-import datetime
 import io
+from datetime import datetime, timezone
 from fastapi import FastAPI, HTTPException, Depends, status, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
@@ -48,8 +48,8 @@ def generate_certificate_student_report(writer, certificates, input_value):
     writer.writerow(["id", "emitido", "expira", "hash", "curso", "institucion", "duracion", "nombre", "apellido", "dni"])
     for cert in certificates:
         if cert["student"]["dni"] == input_value.student:
-            date_issued = datetime.fromtimestamp(cert["issuedDate"])
-            date_expired = datetime.fromtimestamp(cert["expireDate"])
+            date_issued = datetime.fromtimestamp(cert["issuedDate"]/1000.0)
+            date_expired = datetime.fromtimestamp(cert["expireDate"]/1000.0)
             writer.writerow([
                 cert["idcertificate"],
                 date_issued.strftime("%Y-%m-%d %H:%M:%S"),
@@ -68,8 +68,8 @@ def generate_certificate_course_report(writer, certificates, input_value):
     writer.writerow(["id", "emitido", "expira", "hash", "curso", "institucion", "duracion", "nombre", "apellido", "dni"])
     for cert in certificates:
         if cert["course"]["title"] == input_value.course:
-            date_issued = datetime.fromtimestamp(cert["issuedDate"])
-            date_expired = datetime.fromtimestamp(cert["expireDate"])
+            date_issued = datetime.fromtimestamp(cert["issuedDate"]/1000.0)
+            date_expired = datetime.fromtimestamp(cert["expireDate"]/1000.0)
             writer.writerow([
                 cert["idcertificate"],
                 date_issued.strftime("%Y-%m-%d %H:%M:%S"),
@@ -176,16 +176,12 @@ async def upload_csv_students(file: UploadFile, db: db_dependency):
     csv_reader = csv.reader(io.StringIO(decoded_contents))
 
     # Extract information into an object
-    data = []
+    data: List[InputStudent] = []
     for row in csv_reader:
         # Assuming the CSV has columns: column1, column2, column3
         if row[0] != 'nombre' and row[0] != 'name':
-            data.append({
-                "name": row[0],
-                "surname": row[1],
-                "dni": row[2]
-            })
-    student_list = [Student(**value.model_dump()) for value in data]
+            data.append(InputStudent(name=row[0], surname=row[1], dni=row[2]))
+    student_list = [Student(name=value.name, surname=value.surname, dni=value.dni) for value in data]
     db.add_all(student_list)
     db.commit() 
     
