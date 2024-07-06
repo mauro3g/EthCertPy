@@ -24,7 +24,7 @@
 </div>
 <div class="card flex justify-content-center">
     <p-toast></p-toast>
-    <p-fileUpload mode="basic" chooseLabel="Seleccionar archivo" name="demo[]"
-        accept=".csv*" [maxFileSize]="1000000"
-        (onUpload)="onUpload($event)"></p-fileUpload>
+    <p-fileUpload mode="basic" chooseLabel="Seleccionar archivo"
+        accept=".csv" [maxFileSize]="1000000"
+        (onSelect)="onUpload($event)"></p-fileUpload>
 </div>
