@@ -179,15 +179,15 @@ async def upload_csv_students(file: UploadFile, db: db_dependency):
     data = []
     for row in csv_reader:
         # Assuming the CSV has columns: column1, column2, column3
-        data.append({
-            "name": row[0],
-            "surname": row[1],
-            "dni": row[2]
-        })
-    print(data)
-    #student_list = [Student(**value.model_dump()) for value in data]
-    #db.add_all(student_list)
-    #db.commit() 
+        if row[0] != 'nombre' and row[0] != 'name':
+            data.append({
+                "name": row[0],
+                "surname": row[1],
+                "dni": row[2]
+            })
+    student_list = [Student(**value.model_dump()) for value in data]
+    db.add_all(student_list)
+    db.commit() 
     
     return "Los registros se realizaron exitosamente"
 
