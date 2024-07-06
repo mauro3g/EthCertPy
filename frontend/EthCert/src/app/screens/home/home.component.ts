@@ -1,19 +1,27 @@
 import { Component, OnInit } from '@angular/core';
 import { CertificatesServiceService } from '../../services/certificates-service.service';
-import { ICertificate, ICourse, IStudent } from 'src/app/interfaces/interfaces';
-import { MegaMenuItem } from 'primeng/api';
+import {
+  ICertificate,
+  ICourse,
+  IReportRequest,
+  IStudent,
+} from 'src/app/interfaces/interfaces';
+import { ConfirmationService, MegaMenuItem } from 'primeng/api';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { MessageService } from 'primeng/api';
 import { StudentsFormComponent } from 'src/app/components/students-form/students-form.component';
 import { BehaviorSubject } from 'rxjs';
 import { CourseFormComponent } from 'src/app/components/course-form/course-form.component';
 import { CertificateFormComponent } from 'src/app/components/certificate-form/certificate-form.component';
+import { Router } from '@angular/router';
+import { StudentsUploadComponent } from '../../components/students-upload/students-upload.component';
+import { ReportFormComponent } from 'src/app/components/report-form/report-form.component';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
-  providers: [DialogService, MessageService],
+  providers: [DialogService, MessageService, ConfirmationService],
 })
 export class HomeComponent implements OnInit {
   items: MegaMenuItem[] = [];
@@ -32,7 +40,9 @@ export class HomeComponent implements OnInit {
   constructor(
     private readonly certificateService: CertificatesServiceService,
     public dialogService: DialogService,
-    public messageService: MessageService
+    public messageService: MessageService,
+    public confirmationService: ConfirmationService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -82,6 +92,11 @@ export class HomeComponent implements OnInit {
                   icon: 'pi pi-plus',
                   command: () => this.showStudentForm(),
                 },
+                {
+                  label: 'Subir archivo',
+                  icon: 'pi pi-file',
+                  command: () => this.showStudentUpload(),
+                },
               ],
             },
           ],
@@ -104,6 +119,24 @@ export class HomeComponent implements OnInit {
                   label: 'Crear plantilla',
                   icon: 'pi pi-plus',
                   command: () => this.showCourseForm(),
+                },
+              ],
+            },
+          ],
+        ],
+      },
+      {
+        label: 'Reportes',
+        icon: 'pi pi-fw pi-list',
+        items: [
+          [
+            {
+              label: 'Reportes',
+              items: [
+                {
+                  label: 'Descargar Reporte',
+                  icon: 'pi pi-file',
+                  command: () => this.showReportForm(),
                 },
               ],
             },
@@ -141,8 +174,8 @@ export class HomeComponent implements OnInit {
     this.certificateService
       .get_certificates()
       .subscribe((response: ICertificate[]) => {
-        if(response.length > 0){
-          response.splice(0,1);
+        if (response.length > 0) {
+          response.splice(0, 1);
           this.certificates = response;
           this.showCertificateList();
         }
@@ -198,6 +231,28 @@ export class HomeComponent implements OnInit {
       });
   }
 
+  requestReport(data: IReportRequest) {
+    this.loading.next(true);
+    this.certificateService
+      .download_report(data)
+      .subscribe((response: Blob) => {
+        try {
+          this.loading.next(false);
+          const url = window.URL.createObjectURL(response);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'report.csv';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+          this.showSuccess = true;
+        } catch (e) {
+          alert('error downloading report ' + e);
+        }
+      });
+  }
+
   showStudentForm() {
     this.ref = this.dialogService.open(StudentsFormComponent, {
       data: {
@@ -211,6 +266,20 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  showStudentUpload() {
+    this.ref = this.dialogService.open(StudentsUploadComponent, {
+      data: {
+        loading: this.loading.value,
+        registerData: (data: IStudent) => this.registerStudent(data),
+      },
+      header: 'Subir archivo de estudiantes',
+      height: '100%',
+      width: '70%',
+      contentStyle: { overflow: 'auto' },
+      baseZIndex: 10000,
+    });
+  }
+
   showCourseForm() {
     this.ref = this.dialogService.open(CourseFormComponent, {
       data: {
@@ -218,6 +287,7 @@ export class HomeComponent implements OnInit {
         registerData: (data: ICourse) => this.registerCourse(data),
       },
       header: 'Registrar plantilla de curso',
+      height: '80%',
       width: '70%',
       contentStyle: { overflow: 'auto' },
       baseZIndex: 10000,
@@ -233,9 +303,41 @@ export class HomeComponent implements OnInit {
         registerData: (data: ICertificate) => this.registerCertificate(data),
       },
       header: 'Registrar certificado',
+      height: '70%',
       width: '70%',
       contentStyle: { overflow: 'auto' },
       baseZIndex: 10000,
+    });
+  }
+
+  showReportForm() {
+    this.ref = this.dialogService.open(ReportFormComponent, {
+      data: {
+        students: this.students,
+        templates: this.courses,
+        certificates: this.certificates,
+        loading: this.loading.value,
+        requestReport: (data: IReportRequest) => this.requestReport(data),
+      },
+      header: 'Descargar reporte en csv',
+      height: '100%',
+      width: '70%',
+      contentStyle: { overflow: 'auto' },
+      baseZIndex: 10000,
+    });
+  }
+
+  confirm(event: Event) {
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: 'Quieres cerrar sesión?',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        // Store login information in local storage
+        localStorage.setItem('isLoggedIn', '');
+        // Redirect to login page
+        this.router.navigate(['/login']);
+      },
     });
   }
 }

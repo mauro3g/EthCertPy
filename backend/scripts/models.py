@@ -73,3 +73,9 @@ class InputCertificate(BaseModel):
     hash: str
     student:InputStudent2
     course: InputCourse
+    
+class InputReportRequest(BaseModel):
+    type: str
+    course: str
+    student: str
+    institution: str

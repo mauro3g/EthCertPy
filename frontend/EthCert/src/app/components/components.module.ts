@@ -8,9 +8,12 @@ import { CertificateListComponent } from './certificate-list/certificate-list.co
 import { CertificateFormComponent } from './certificate-form/certificate-form.component';
 import { PrimengModule } from '../modules/primeng/primeng.module';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { FileUploadModule } from 'primeng/fileupload';
 import { LoginFormComponent } from './login-form/login-form.component';
 import { CertificateSearchComponent } from './certificate-search/certificate-search.component';
 import { CertificateValidateComponent } from './certificate-validate/certificate-validate.component';
+import { StudentsUploadComponent } from './students-upload/students-upload.component';
+import { ReportFormComponent } from './report-form/report-form.component';
 
 @NgModule({
   declarations: [
@@ -23,8 +26,10 @@ import { CertificateValidateComponent } from './certificate-validate/certificate
     LoginFormComponent,
     CertificateSearchComponent,
     CertificateValidateComponent,
+    StudentsUploadComponent,
+    ReportFormComponent,
   ],
-  imports: [CommonModule, PrimengModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, PrimengModule, ReactiveFormsModule, FormsModule, FileUploadModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   exports: [
     StudentsListComponent,
@@ -36,6 +41,8 @@ import { CertificateValidateComponent } from './certificate-validate/certificate
     LoginFormComponent,
     CertificateSearchComponent,
     CertificateValidateComponent,
+    StudentsUploadComponent,
+    ReportFormComponent
   ],
 })
 export class ComponentsModule {}

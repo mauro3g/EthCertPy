@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { ICertificate } from 'src/app/interfaces/interfaces';
 import { CertificatesServiceService } from 'src/app/services/certificates-service.service';
@@ -15,8 +16,13 @@ export class ValidateComponent {
   notFound = new BehaviorSubject<boolean>(false);
 
   constructor(
-    private readonly certificateService: CertificatesServiceService
+    private readonly certificateService: CertificatesServiceService,
+    private router: Router
   ) {}
+
+  handleGoLogin() {
+    this.router.navigate(['/login']);
+  }
 
   handleSearch(search: string) {
     console.log(search)

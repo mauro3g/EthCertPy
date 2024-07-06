@@ -1,10 +1,16 @@
+<div class="validate-header">
+    <p-button label="Ingreso" (onClick)="handleGoLogin()" icon="pi pi-user" styleClass="p-button-sm p-button-raised p-button-secondary"></p-button>
+    
+</div>
 <div class="validate">
     <div class="validate-title">
         <img src="../../../assets/ethereum-eth-logo-diamond.svg" height="100" class="mr-2" alt="logo" />
         <h1>EthCert</h1>
     </div>
-    <app-certificate-search [loading]="loading.value" (searchCertificate)="handleSearch($event)"></app-certificate-search>
-    <app-certificate-validate *ngIf="showResult.value && !loading.value" [certificate]="certificate"></app-certificate-validate>
+    <app-certificate-search [loading]="loading.value"
+        (searchCertificate)="handleSearch($event)"></app-certificate-search>
+    <app-certificate-validate *ngIf="showResult.value && !loading.value"
+        [certificate]="certificate"></app-certificate-validate>
     <div class="not-found" *ngIf="notFound.value && !loading.value">
         <img src="../../../assets/error_found.png" height="250" class="mr-2" alt="not-found" />
         <h1>No se han encontrado resultados!</h1>

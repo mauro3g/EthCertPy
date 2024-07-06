@@ -11,6 +11,11 @@
     display: flex;
     align-self: center;
   }
+
+  &-header{
+    display: flex;
+    justify-content: end;
+  }
 }
 
 .not-found{

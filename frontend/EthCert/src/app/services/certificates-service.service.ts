@@ -1,10 +1,11 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, Type } from '@angular/core';
 import { Observable } from 'rxjs';
 import {
   ICertificate,
   ICourse,
   ILogin,
+  IReportRequest,
   IStudent,
 } from '../interfaces/interfaces';
 
@@ -12,8 +13,9 @@ import {
   providedIn: 'root',
 })
 export class CertificatesServiceService {
-  private readonly API_URL = 'http://localhost:8000/';
-  //private readonly API_URL = 'https://d8cfe026-bdbe-4cff-9d2b-e0402a169485.mock.pstmn.io/';
+  //private readonly API_URL = 'http://localhost:8000/';
+  private readonly API_URL =
+    'https://d8cfe026-bdbe-4cff-9d2b-e0402a169485.mock.pstmn.io/';
 
   constructor(private readonly httpClient: HttpClient) {}
 
@@ -54,5 +56,16 @@ export class CertificatesServiceService {
     return this.httpClient.get<ICertificate[]>(
       this.API_URL + 'certificate' + `/${id}`
     );
+  }
+
+  download_report(request: IReportRequest): Observable<Blob> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return this.httpClient.post(this.API_URL + 'certificate-report', request, {
+      headers,
+      responseType: 'blob',
+    });
   }
 }

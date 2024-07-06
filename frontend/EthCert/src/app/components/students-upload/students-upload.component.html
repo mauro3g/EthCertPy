@@ -1,0 +1,30 @@
+<div>
+    <span>Registrar varios estudiantes mediante un archivo .csv</span>
+    <br>
+    <span>El archivo debe tener un formato similar al siguiente:</span>
+    <br>
+    <div class="table-example">
+        <p-table [value]="studentExamples" [tableStyle]="{ 'min-width': '30rem' }">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Identificación</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-studentExample>
+                <tr>
+                    <td>{{ studentExample.name }}</td>
+                    <td>{{ studentExample.surname }}</td>
+                    <td>{{ studentExample.dni }}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+<div class="card flex justify-content-center">
+    <p-toast></p-toast>
+    <p-fileUpload mode="basic" chooseLabel="Seleccionar archivo" name="demo[]"
+        accept=".csv*" [maxFileSize]="1000000"
+        (onUpload)="onUpload($event)"></p-fileUpload>
+</div>

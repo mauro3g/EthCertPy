@@ -1,8 +1,12 @@
-from fastapi import FastAPI, HTTPException, Depends, status
+import csv
+import datetime
+import io
+from fastapi import FastAPI, HTTPException, Depends, status, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
 from typing import Annotated
 from backend.scripts.database import SessionLocal
-from backend.scripts.models import Users, Student, Course, Login, InputCourse, InputStudent, InputStudent2, InputCertificate 
+from backend.scripts.models import InputReportRequest, Users, Student, Course, Login, InputCourse, InputStudent, InputStudent2, InputCertificate 
 from backend.scripts.web3Con import getCertificateContract, caller
 from sqlalchemy.orm import Session
 from typing import List
@@ -31,15 +35,74 @@ def get_db():
 
 db_dependency = Annotated[Session, Depends(get_db)]
 
+def generate_student_course_report(writer, certificates, input_value):
+    writer.writerow(["curso", input_value.course])
+    writer.writerow(["nombre", "apellido", "dni"])
+    for cert in certificates:
+        if cert.course.title == input_value.course:
+            writer.writerow([cert.student.name, cert.student.surname, cert.student.dni])
 
+def generate_certificate_student_report(writer, certificates, input_value):
+    writer.writerow(["estudiante", input_value.student])
+    writer.writerow(["id", "emitido", "expira", "hash", "curso", "institucion", "duracion", "nombre", "apellido", "dni"])
+    for cert in certificates:
+        if cert.student.dni == input_value.student:
+            date_issued = datetime.fromtimestamp(cert.issuedDate)
+            date_expired = datetime.fromtimestamp(cert.expireDate)
+            writer.writerow([
+                cert.idcertificate,
+                date_issued.strftime("%Y-%m-%d %H:%M:%S"),
+                date_expired.strftime("%Y-%m-%d %H:%M:%S"),
+                cert.hash,
+                cert.course.title,
+                cert.course.institution,
+                cert.course.duration,
+                cert.student.name,
+                cert.student.surname,
+                cert.student.dni
+            ])
+
+def generate_certificate_course_report(writer, certificates, input_value):
+    writer.writerow(["curso", input_value.course])
+    writer.writerow(["id", "emitido", "expira", "hash", "curso", "institucion", "duracion", "nombre", "apellido", "dni"])
+    for cert in certificates:
+        if cert.course.title == input_value.course:
+            date_issued = datetime.fromtimestamp(cert.issuedDate)
+            date_expired = datetime.fromtimestamp(cert.expireDate)
+            writer.writerow([
+                cert.idcertificate,
+                date_issued.strftime("%Y-%m-%d %H:%M:%S"),
+                date_expired.strftime("%Y-%m-%d %H:%M:%S"),
+                cert.hash,
+                cert.course.title,
+                cert.course.institution,
+                cert.course.duration,
+                cert.student.name,
+                cert.student.surname,
+                cert.student.dni
+            ])
+
+def generate_course_institution_report(writer, certificates, input_value):
+    writer.writerow(["institucion", input_value.institution])
+    writer.writerow(["curso", "institucion", "duracion", "descripcion", "fecha"])
+    for cert in certificates:
+        if cert.course.institution == input_value.institution:
+            writer.writerow([
+                cert.course.title,
+                cert.course.institution,
+                cert.course.duration,
+                cert.course.description,
+                cert.course.date
+            ])
+            
 def transform_certificate_to_json(array):
     json_array = []
     for item in array:
         id_certificate = item[0]
-        issuedDate = item[1]
-        expireDate = item[2]
+        issued_date = item[1]
+        expire_date = item[2]
         link = item[3]
-        hash = item[4]
+        hash_var = item[4]
         id_student = item[5][0]
         student_name = item[5][1]
         student_surname = item[5][2]
@@ -67,10 +130,10 @@ def transform_certificate_to_json(array):
         
         json_object = {
             "idcertificate": id_certificate,
-            "issuedDate": issuedDate,
-            "expireDate": expireDate,
+            "issuedDate": issued_date,
+            "expireDate": expire_date,
             "link": link,
-            "hash": hash,
+            "hash": hash_var,
             "student": json_student,
             "course": json_course
         }
@@ -79,6 +142,8 @@ def transform_certificate_to_json(array):
     
     return json_array
 
+def extract_all_certificates():
+    return transform_certificate_to_json(certificate_contract.functions.getAllCertificates().call())
 
 @app.post("/login/", status_code=status.HTTP_200_OK)
 async def login(input_value:Login, db:db_dependency):
@@ -98,9 +163,32 @@ async def create_students(input_value: List[InputStudent], db: db_dependency):
     return "Los registros se realizaron exitosamente"
 
 @app.get("/student-list/", status_code=status.HTTP_200_OK)
-async def get_students(db:db_dependency):
+async def get_students(db: db_dependency):
     result = db.query(Student).all()
     return result
+
+@app.post("/student-upload/", status_code=status.HTTP_201_CREATED)
+async def upload_csv_students(file: UploadFile, db: db_dependency):
+    contents = await file.read()
+    # Use StringIO to convert bytes to a file-like object
+    decoded_contents = contents.decode('utf-8')
+    csv_reader = csv.reader(io.StringIO(decoded_contents))
+
+    # Extract information into an object
+    data = []
+    for row in csv_reader:
+        # Assuming the CSV has columns: column1, column2, column3
+        data.append({
+            "name": row[0],
+            "surname": row[1],
+            "dni": row[2]
+        })
+    print(data)
+    #student_list = [Student(**value.model_dump()) for value in data]
+    #db.add_all(student_list)
+    #db.commit() 
+    
+    return "Los registros se realizaron exitosamente"
 
 @app.post("/course/", status_code=status.HTTP_201_CREATED)
 async def create_course(input_value: InputCourse, db: db_dependency):
@@ -118,12 +206,12 @@ async def get_courses(db:db_dependency):
 async def create_certificate(input_value: InputCertificate):
     student = input_value.student
     course = input_value.course
-    hashCertificate = sha1((str(student.idstudent)+student.dni+str(input_value.issuedDate)+course.title).encode("UTF-8")).hexdigest()
+    hash_certificate = sha1((str(student.idstudent)+student.dni+str(input_value.issuedDate)+course.title).encode("UTF-8")).hexdigest()
     certificate_contract.functions.addCertificate(
         input_value.issuedDate,
         input_value.expireDate,
         input_value.link,
-        hashCertificate,
+        hash_certificate,
         [student.idstudent,student.name,student.surname,student.dni],
         [course.title,course.description,course.institution,course.duration,course.date]
     ).transact({"from": caller})
@@ -131,8 +219,29 @@ async def create_certificate(input_value: InputCertificate):
 
 @app.get("/certificate-list/", status_code=status.HTTP_200_OK)
 async def get_certificates():
-    certlist = transform_certificate_to_json(certificate_contract.functions.getAllCertificates().call())
-    return certlist
+    return extract_all_certificates()
+
+@app.post("/certificate-report/", status_code=status.HTTP_200_OK)
+async def get_report(input_value: InputReportRequest):
+    output = io.StringIO()
+    writer = csv.writer(output)
+    certificates = extract_all_certificates()
+    
+    report_generators = {
+        'student-course': generate_student_course_report,
+        'certificate-student': generate_certificate_student_report,
+        'certificate-course': generate_certificate_course_report,
+        'course-institution': generate_course_institution_report
+    }
+
+    report_generator = report_generators.get(input_value.type)
+    if report_generator:
+        report_generator(writer, certificates, input_value)
+    else:
+        raise ValueError(f"Invalid report type: {input_value.type}")
+
+    output.seek(0)
+    return StreamingResponse(output, media_type="text/csv", headers={"Content-Disposition": "attachment; filename=export.csv"})
 
 @app.get("/certificate/{input_value}", status_code=status.HTTP_200_OK)
 async def get_certificate(input_value: str):

@@ -3,6 +3,12 @@
         <ng-template pTemplate="start">
             <img src="../../../assets/ethereum-eth-logo-diamond.svg" height="40" class="mr-2" alt="logo" />
         </ng-template>
+        <div class="card flex justify-content-center gap-2">
+            <p-toast></p-toast>
+            <p-confirmPopup></p-confirmPopup>
+            <p-button icon="pi pi-user" (click)="confirm($event)" styleClass="p-button-rounded p-button-info p-button-outlined"></p-button>
+        </div>
+
     </p-megaMenu>
 </div>
 <div class="table-list">
@@ -11,7 +17,8 @@
     <app-certificate-list [certificates]="certificates" *ngIf="showCertificates"></app-certificate-list>
     <p-toast></p-toast>
 </div>
-<p-dialog [(visible)]="showSuccess" position="bottom-right" header="Resultado" [contentStyle]="{ background: 'greenn' }">
+<p-dialog [(visible)]="showSuccess" position="bottom-right" header="Resultado"
+    [contentStyle]="{ background: 'greenn' }">
     <p>
         El registro se ha creado exitosamente.
     </p>

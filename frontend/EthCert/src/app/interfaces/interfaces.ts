@@ -36,7 +36,19 @@ export interface ICertificate {
   course: ICourse;
 }
 
-export interface ISearch{
+export interface ISearch {
   searchData: string;
 }
 
+export interface IReportRequest {
+  type: string;
+  course: string;
+  student: string;
+  institution: string;
+}
+
+export interface IReportOption {
+  id: number;
+  title: string;
+  option: string;
+}
