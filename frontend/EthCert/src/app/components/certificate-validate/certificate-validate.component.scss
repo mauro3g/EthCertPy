@@ -1,6 +1,17 @@
 .validate {
+
     &-issued {
         display: flex;
         justify-content: space-between;
+    }
+
+    .certificate {
+        text-align: center;
+
+        &-footer{
+            padding: 20px;
+            background-color: lightslategrey;
+            color: white;
+        }
     }
 }

@@ -11,6 +11,8 @@
         <div class="flex flex-column gap-2 mb-4">
             <label htmlFor="dni" class="form-label">Identificacion</label>
             <input type="text" pInputText class="form-control" id="dni" placeholder="" formControlName="dni">
+            <span *ngIf="dniInUse" style="color: red;">Identificación ya registrada.</span>
+            <span *ngIf="invalidCi && formStudent.controls['dni'].touched"  style="color: red;">Identificación no es una cédula ecuatoriana.</span>
         </div>
 
     </form>

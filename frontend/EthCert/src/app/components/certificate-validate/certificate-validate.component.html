@@ -1,33 +1,40 @@
-<div class="validate">
-    <p-card>
-        <h2>{{ certificate?.course?.title}}</h2>
-        <p>{{ certificate?.course?.description}}</p>
-        <div>
-            <span>Conferido a: </span><span>{{ certificate?.student?.name + ' ' + certificate?.student?.surname }}</span>
+<div #pdfContent class="validate">
+    <p-card subheader="EthCert confiere el certificado a:">
+        <ng-template pTemplate="header">
+            <img src="../../../assets/eth-banner.png" height="100" alt="logo" />
+        </ng-template>
+        <div class="certificate">
+            <h1><span>{{ certificate?.student?.name + ' ' + certificate?.student?.surname
+                    }}</span></h1>
+            <h2>{{ certificate?.course?.title}}</h2>
+            <p>{{ certificate?.course?.description}}</p>
+            <hr>
+            <div class="certificate-footer">
+                <div class="validate-issued">
+                    <h3>
+                        <span>Emitido por: </span><span>{{ certificate?.course?.institution }}</span>
+                    </h3>
+                    <h3>
+                        <span>Duración: </span><span>{{ certificate?.course?.duration }}</span>
+                    </h3>
+                    <h3>
+                        <span>Fecha de finalización: </span><span>{{ certificate?.course?.date }}</span>
+                    </h3>
+                </div>
+                <div class="validate-issued">
+                    <h3>
+                        <span>Emitido desde: </span><span>{{ formatDate(certificate?.issuedDate || 0) }}</span>
+                    </h3>
+                    <h3>
+                        <span>hash ID </span><span>{{ certificate?.hash }}</span>
+                    </h3>
+                    <h3>
+                        <span>Caducidad: </span><span>{{ formatDate(certificate?.expireDate || 0) }}</span>
+                    </h3>
+                </div>
+            </div>
         </div>
-        <hr>
-        <div class="validate-issued">
-            <div>
-                <span>Emitido por: </span><span>{{ certificate?.course?.institution }}</span>
-            </div>
-            <div>
-                <span>Duración: </span><span>{{ certificate?.course?.duration }}</span>
-            </div>
-            <div>
-                <span>Fecha de finalización: </span><span>{{ certificate?.course?.date }}</span>
-            </div>
-        </div>
-        <div class="validate-issued">
-            <div>
-                <span>Emitido desde: </span><span>{{ formatDate(certificate?.issuedDate || 0) }}</span>
-            </div>
-            <div>
-                <span>Caducidad: </span><span>{{ formatDate(certificate?.expireDate || 0) }}</span>
-            </div>
-        </div>
-        <div>
-            <span>hash ID </span><span>{{ certificate?.hash }}</span>
-        </div>
-        
     </p-card>
 </div>
+<hr>
+<p-button label="Descargar pdf" icon="pi pi-check" (onClick)="generatePdf()"></p-button>

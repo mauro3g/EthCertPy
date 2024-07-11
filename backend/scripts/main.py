@@ -182,7 +182,16 @@ async def upload_csv_students(file: UploadFile, db: db_dependency):
         if row[0] != 'nombre' and row[0] != 'name':
             data.append(InputStudent(name=row[0], surname=row[1], dni=row[2]))
     student_list = [Student(name=value.name, surname=value.surname, dni=value.dni) for value in data]
-    db.add_all(student_list)
+    #search for registered dni
+    dni_values = [student.dni for student in student_list]
+    # Search for coincidences of the dni values in the database
+    result = db.query(Student).filter(Student.dni.in_(dni_values)).all()
+    # Extract the dni values from the result
+    result_dni_values = {student.dni for student in result}
+    # Filter the student_list to exclude students whose dni is in result_dni_values
+    filtered_student_list = [student for student in student_list if student.dni not in result_dni_values]
+    
+    db.add_all(filtered_student_list)
     db.commit() 
     
     return "Los registros se realizaron exitosamente"

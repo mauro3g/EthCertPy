@@ -16,6 +16,7 @@ import { CertificateFormComponent } from 'src/app/components/certificate-form/ce
 import { Router } from '@angular/router';
 import { StudentsUploadComponent } from '../../components/students-upload/students-upload.component';
 import { ReportFormComponent } from 'src/app/components/report-form/report-form.component';
+import { CertificateValidateComponent } from 'src/app/components/certificate-validate/certificate-validate.component';
 
 @Component({
   selector: 'app-home',
@@ -208,7 +209,7 @@ export class HomeComponent implements OnInit {
   }
 
   uploadStudent(file: File) {
-    console.log('asdas')
+    console.log('asdas');
     this.loading.next(true);
     this.certificateService
       .upload_students(file)
@@ -270,6 +271,7 @@ export class HomeComponent implements OnInit {
     this.ref = this.dialogService.open(StudentsFormComponent, {
       data: {
         loading: this.loading.value,
+        students: this.students,
         registerData: (data: IStudent) => this.registerStudent(data),
       },
       header: 'Registrar estudiante',
@@ -296,6 +298,7 @@ export class HomeComponent implements OnInit {
     this.ref = this.dialogService.open(CourseFormComponent, {
       data: {
         loading: this.loading.value,
+        templates: this.courses,
         registerData: (data: ICourse) => this.registerCourse(data),
       },
       header: 'Registrar plantilla de curso',
@@ -333,6 +336,19 @@ export class HomeComponent implements OnInit {
       header: 'Descargar reporte en csv',
       height: '80%',
       width: '70%',
+      contentStyle: { overflow: 'auto' },
+      baseZIndex: 10000,
+    });
+  }
+
+  showCertificateImage(certificate: ICertificate) {
+    this.ref = this.dialogService.open(CertificateValidateComponent, {
+      data: {
+        certificate: certificate,
+      },
+      header: 'Ver/Descargar Certificado',
+      height: '100%',
+      width: '80%',
       contentStyle: { overflow: 'auto' },
       baseZIndex: 10000,
     });

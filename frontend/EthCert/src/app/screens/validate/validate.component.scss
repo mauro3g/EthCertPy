@@ -1,4 +1,5 @@
 .validate {
+  color: white;
   height: 100%;
   width: 100%;
   display: flex;
@@ -7,18 +8,18 @@
   gap: 50px;
   padding: 10%;
 
-  &-title{
+  &-title {
     display: flex;
     align-self: center;
   }
 
-  &-header{
+  &-header {
     display: flex;
     justify-content: end;
   }
 }
 
-.not-found{
+.not-found {
   margin: 20px;
   display: flex;
   gap: 20px;

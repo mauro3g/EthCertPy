@@ -3,6 +3,8 @@
         <div class="flex flex-column gap-2 mb-4">
             <label htmlFor="title" class="form-label">Título</label>
             <input type="text" pInputText class="form-control" id="title" placeholder="" formControlName="title">
+            <span *ngIf="titleInUse" style="color: red;">Título ya registrado.</span>
+
         </div>
         <div class="flex flex-column gap-2 mb-4">
             <label htmlFor="description" class="form-label">Descripción</label>

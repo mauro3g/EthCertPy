@@ -1,8 +1,16 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import {
+  FormGroup,
+  Validators,
+  UntypedFormBuilder,
+  ValidatorFn,
+  AbstractControl,
+  ValidationErrors,
+} from '@angular/forms';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject } from 'rxjs';
 import { ICourse } from 'src/app/interfaces/interfaces';
+import { isValidCI, titleInUse } from 'src/app/utils/dniFormatter';
 
 @Component({
   selector: 'app-course-form',
@@ -11,20 +19,38 @@ import { ICourse } from 'src/app/interfaces/interfaces';
 })
 export class CourseFormComponent {
   public onClose: Subject<boolean> = new Subject();
-  formCourse: FormGroup = new FormGroup({
-    title: new FormControl('', [Validators.required]),
-    description: new FormControl('', [Validators.required]),
-    institution: new FormControl('', [Validators.required]),
-    duration: new FormControl('', [Validators.required]),
-    date: new FormControl('', [Validators.required]),
-  });
+  formCourse!: FormGroup;
 
   loading: boolean = false;
+  titleInUse: boolean = false;
 
   constructor(
     public ref: DynamicDialogRef,
-    public config: DynamicDialogConfig
-  ) {}
+    public config: DynamicDialogConfig,
+    private readonly fb: UntypedFormBuilder
+  ) {
+    this.formCourse = this.fb.group({
+      title: ['', [Validators.required, this.titleValidator()]],
+      description: ['', [Validators.required]],
+      institution: ['', [Validators.required]],
+      duration: ['', [Validators.required]],
+      date: ['', [Validators.required]],
+    });
+  }
+
+  titleValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const title = control.value;
+
+      // Verificar que el DNI no esté en la lista de estudiantes
+      if (titleInUse(this.config.data.templates, title)) {
+        this.titleInUse = true;
+        return { titleInUse: { value: control.value } };
+      }
+      this.titleInUse = false;
+      return null;
+    };
+  }
 
   doCreate(body: ICourse) {
     this.config.data.registerData(body);

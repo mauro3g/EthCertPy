@@ -9,10 +9,11 @@
                 </th>
                 <th pSortableColumn="expireDate" style="width:10%">Expira <p-sortIcon field="expireDate"></p-sortIcon>
                 </th>
-                <th pSortableColumn="hash" style="width:25%">Hash <p-sortIcon field="hash"></p-sortIcon></th>
-                <th pSortableColumn="student" style="width:25%">Estudiante <p-sortIcon field="student"></p-sortIcon>
+                <th pSortableColumn="hash" style="width:30%">Hash <p-sortIcon field="hash"></p-sortIcon></th>
+                <th pSortableColumn="student" style="width:20%">Estudiante <p-sortIcon field="student"></p-sortIcon>
                 </th>
-                <th pSortableColumn="course" style="width:25%">Curso <p-sortIcon field="course"></p-sortIcon></th>
+                <th pSortableColumn="course" style="width:20%">Curso <p-sortIcon field="course"></p-sortIcon></th>
+                <th pSortableColumn="pdf" style="width:5%">Ver/Descargar <p-sortIcon field="pdf"></p-sortIcon></th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-certificate>
@@ -23,6 +24,9 @@
                 <td>{{certificate.hash}}</td>
                 <td>{{certificate.student.name + " " + certificate.student.surname}}</td>
                 <td>{{certificate.course.title}}</td>
+                <td>
+                    <p-button icon="pi pi-file" styleClass="p-button-rounded" (onClick)="handleViewCertificate(certificate)"></p-button>
+                </td>
             </tr>
         </ng-template>
     </p-table>
