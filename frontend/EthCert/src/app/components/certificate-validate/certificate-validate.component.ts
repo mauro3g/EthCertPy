@@ -3,7 +3,6 @@ import { ICertificate } from 'src/app/interfaces/interfaces';
 import { DateFormatterUtil } from 'src/app/utils/dateFormatter';
 import jspdf from 'jspdf';
 import html2canvas from 'html2canvas';
-import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-certificate-validate',
@@ -15,12 +14,8 @@ export class CertificateValidateComponent extends DateFormatterUtil {
   @ViewChild('pdfContent') pdfContent!: ElementRef;
 
   constructor(
-    public ref: DynamicDialogRef,
-    public config: DynamicDialogConfig
   ) {
     super();
-
-    this.certificate = this.certificate ?? config.data.certificate;
   }
 
   generatePdf() {

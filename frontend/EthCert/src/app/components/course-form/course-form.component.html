@@ -8,23 +8,27 @@
         </div>
         <div class="flex flex-column gap-2 mb-4">
             <label htmlFor="description" class="form-label">Descripción</label>
-            <input type="text" pInputText class="form-control" id="description" placeholder="" formControlName="description">
+            <input type="text" pInputText class="form-control" id="description" placeholder=""
+                formControlName="description">
         </div>
         <div class="flex flex-column gap-2 mb-4">
             <label htmlFor="institution" class="form-label">Institución</label>
-            <input type="text" pInputText class="form-control" id="institution" placeholder="" formControlName="institution">
+            <input type="text" pInputText class="form-control" id="institution" placeholder=""
+                formControlName="institution">
         </div>
         <div class="flex flex-column gap-2 mb-4">
             <label htmlFor="duration" class="form-label">Duración en horas</label>
-            <p-inputNumber formControlName="duration" mode="decimal" [showButtons]="true" inputId="duration" [min]="0"> </p-inputNumber>
+            <p-inputNumber formControlName="duration" mode="decimal" [min]="1" [showButtons]="true" inputId="duration"> </p-inputNumber>
         </div>
         <div class="flex flex-column gap-2 mb-4">
             <label htmlFor="date" class="form-label">Fecha</label>
-            <p-calendar formControlName="date" class="form-control" id="date"></p-calendar>
+            <p-calendar formControlName="date" [minDate]="minDate" [readonlyInput]="true" class="form-control"
+                id="date"></p-calendar>
         </div>
 
     </form>
 </div>
-<div class="modal-footer">
-    <p-button label="Registrar" [loading]="config.data.loading" (click)="submit()" [disabled]="formCourse.invalid"></p-button>
+<div class="modal-footer buttons">
+    <p-button label="Registrar" [loading]="config.data.loading" (click)="submit()"
+        [disabled]="formCourse.invalid"></p-button>
 </div>

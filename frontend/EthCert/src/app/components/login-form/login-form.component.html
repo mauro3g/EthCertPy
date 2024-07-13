@@ -11,7 +11,9 @@
             </div>
         </form>
     </div>
-    <div class="modal-footer">
+    <div class="modal-footer buttons">
         <p-button label="Iniciar sesión" [loading]="loading" (click)="submit()" [disabled]="formLogin.invalid"></p-button>
+        <p-button label="Regresar" (click)="goHome()"></p-button>
+
     </div>
 </p-card>

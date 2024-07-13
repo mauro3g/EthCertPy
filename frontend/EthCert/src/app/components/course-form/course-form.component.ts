@@ -7,6 +7,7 @@ import {
   AbstractControl,
   ValidationErrors,
 } from '@angular/forms';
+import { Router } from '@angular/router';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject } from 'rxjs';
 import { ICourse } from 'src/app/interfaces/interfaces';
@@ -23,34 +24,22 @@ export class CourseFormComponent {
 
   loading: boolean = false;
   titleInUse: boolean = false;
+  minDate = new Date();
 
   constructor(
     public ref: DynamicDialogRef,
     public config: DynamicDialogConfig,
-    private readonly fb: UntypedFormBuilder
+    private readonly fb: UntypedFormBuilder,
   ) {
     this.formCourse = this.fb.group({
-      title: ['', [Validators.required, this.titleValidator()]],
+      title: ['', [Validators.required]],
       description: ['', [Validators.required]],
       institution: ['', [Validators.required]],
-      duration: ['', [Validators.required]],
+      duration: ['1', [Validators.required]],
       date: ['', [Validators.required]],
     });
   }
 
-  titleValidator(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const title = control.value;
-
-      // Verificar que el DNI no esté en la lista de estudiantes
-      if (titleInUse(this.config.data.templates, title)) {
-        this.titleInUse = true;
-        return { titleInUse: { value: control.value } };
-      }
-      this.titleInUse = false;
-      return null;
-    };
-  }
 
   doCreate(body: ICourse) {
     this.config.data.registerData(body);

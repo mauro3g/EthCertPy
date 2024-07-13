@@ -12,6 +12,7 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { LoginFormComponent } from './login-form/login-form.component';
 import { CertificateSearchComponent } from './certificate-search/certificate-search.component';
 import { CertificateValidateComponent } from './certificate-validate/certificate-validate.component';
+import { CertificateValidateModalComponent } from './certificate-validate/certificate-validate-modal.component';
 import { StudentsUploadComponent } from './students-upload/students-upload.component';
 import { ReportFormComponent } from './report-form/report-form.component';
 
@@ -26,6 +27,7 @@ import { ReportFormComponent } from './report-form/report-form.component';
     LoginFormComponent,
     CertificateSearchComponent,
     CertificateValidateComponent,
+    CertificateValidateModalComponent,
     StudentsUploadComponent,
     ReportFormComponent,
   ],
@@ -41,6 +43,7 @@ import { ReportFormComponent } from './report-form/report-form.component';
     LoginFormComponent,
     CertificateSearchComponent,
     CertificateValidateComponent,
+    CertificateValidateModalComponent,
     StudentsUploadComponent,
     ReportFormComponent
   ],

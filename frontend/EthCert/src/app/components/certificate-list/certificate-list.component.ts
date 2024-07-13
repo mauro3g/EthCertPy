@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { SortEvent } from 'primeng/api';
 import { ICertificate } from 'src/app/interfaces/interfaces';
 import { DateFormatterUtil } from 'src/app/utils/dateFormatter';
@@ -21,6 +21,13 @@ export class CertificateListComponent extends DateFormatterUtil {
 
   handleViewCertificate(certificate: ICertificate) {
     this.viewCertificate.emit(certificate);
+  }
+
+  validateExpireDate(expireDate: string) {
+    if (expireDate.includes('1969')) {
+      return 'No expira';
+    }
+    return this.formatDate(expireDate);
   }
 
   customSort(event: SortEvent) {

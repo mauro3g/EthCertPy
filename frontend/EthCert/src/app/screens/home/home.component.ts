@@ -16,7 +16,7 @@ import { CertificateFormComponent } from 'src/app/components/certificate-form/ce
 import { Router } from '@angular/router';
 import { StudentsUploadComponent } from '../../components/students-upload/students-upload.component';
 import { ReportFormComponent } from 'src/app/components/report-form/report-form.component';
-import { CertificateValidateComponent } from 'src/app/components/certificate-validate/certificate-validate.component';
+import { CertificateValidateModalComponent } from 'src/app/components/certificate-validate/certificate-validate-modal.component';
 
 @Component({
   selector: 'app-home',
@@ -209,7 +209,6 @@ export class HomeComponent implements OnInit {
   }
 
   uploadStudent(file: File) {
-    console.log('asdas');
     this.loading.next(true);
     this.certificateService
       .upload_students(file)
@@ -342,7 +341,7 @@ export class HomeComponent implements OnInit {
   }
 
   showCertificateImage(certificate: ICertificate) {
-    this.ref = this.dialogService.open(CertificateValidateComponent, {
+    this.ref = this.dialogService.open(CertificateValidateModalComponent, {
       data: {
         certificate: certificate,
       },
