@@ -23,8 +23,8 @@ export class CertificateListComponent extends DateFormatterUtil {
     this.viewCertificate.emit(certificate);
   }
 
-  validateExpireDate(expireDate: string) {
-    if (expireDate.includes('1969')) {
+  validateExpireDate(expireDate: any) {
+    if (expireDate === 0 || expireDate.toString().includes('1969')) {
       return 'No expira';
     }
     return this.formatDate(expireDate);
