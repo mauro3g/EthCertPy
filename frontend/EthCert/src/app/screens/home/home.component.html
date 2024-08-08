@@ -5,7 +5,7 @@
             <div class="flex">
                 <img src="../../../assets/ethereum-eth-logo-diamond.svg" height="40" class="mr-2" alt="logo" />
                 <h2 *ngIf="showStudents">Estudiantes</h2>
-                <h2 *ngIf="showCourses">Cursos</h2>
+                <h2 *ngIf="showCourses">Plantillas de Cursos</h2>
                 <h2 *ngIf="showCertificates">Certificados</h2>
             </div>
             <div class="card flex justify-content-center gap-2">
@@ -65,7 +65,7 @@
         </div>
     </div>
 
-    <div class="flex-grow-1" *ngIf="hideButtons">
+    <div class="flex-grow-1 ml-2 mt-2" *ngIf="hideButtons">
         <div class="table-list">
             <app-students-list [students]="students" *ngIf="showStudents" (modify)="showStudentFormEdit($event)"
                 (delete)="confirmDeleteStudent($event)"></app-students-list>
@@ -98,7 +98,7 @@
             </p>
         </p-dialog>
     </div>
-    <div class="card flex justify-content-center gap-2">
+    <div class="flex justify-content-center">
         <p-toast></p-toast>
         <p-confirmDialog key="deleteDialog" [style]="{width: '50vw'}"></p-confirmDialog>
     </div>

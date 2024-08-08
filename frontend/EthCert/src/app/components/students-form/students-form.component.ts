@@ -57,6 +57,10 @@ export class StudentsFormComponent {
   dniValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const dni = control.value;
+      // Si es editar si permite poner la misma cedula
+      if (this.edit && dni === this.config.data.currentStudent.dni) {
+        return null;
+      }
 
       // Verificar que el DNI no esté en la lista de estudiantes
       if (dniInUse(this.config.data.students, dni)) {
