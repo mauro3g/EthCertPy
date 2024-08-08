@@ -321,7 +321,8 @@ export class HomeComponent implements OnInit {
           currentStudent: student,
           loading: this.loading.value,
           students: this.students,
-          registerData: (data: IStudent) => this.updateStudent(data),
+          registerData: (data: IStudent) =>
+            this.updateStudent({ ...data, idstudent: student.idstudent }),
         },
         header: 'Editar estudiante',
         width: '70%',
@@ -349,7 +350,7 @@ export class HomeComponent implements OnInit {
   showCourseForm() {
     this.ref = this.dialogService.open(CourseFormComponent, {
       data: {
-        edit: true,
+        edit: false,
         currentCourse: undefined,
         loading: this.loading.value,
         templates: this.courses,
@@ -370,7 +371,8 @@ export class HomeComponent implements OnInit {
           currentCourse: course,
           loading: this.loading.value,
           templates: this.courses,
-          registerData: (data: ICourse) => this.updateCourse(data),
+          registerData: (data: ICourse) =>
+            this.updateCourse({ ...data, idcourse: course.idcourse }),
         },
         header: 'Editar plantilla de curso',
         width: '70%',
