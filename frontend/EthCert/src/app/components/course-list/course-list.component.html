@@ -5,14 +5,16 @@
             <tr>
                 <th pSortableColumn="idcourse" style="width:5%">id <p-sortIcon field="idcourse"></p-sortIcon>
                 </th>
-                <th pSortableColumn="title" style="width:20%">Título <p-sortIcon field="title"></p-sortIcon>
+                <th pSortableColumn="title" style="width:15%">Título <p-sortIcon field="title"></p-sortIcon>
                 </th>
-                <th pSortableColumn="description" style="width:20%">Descripción <p-sortIcon field="description"></p-sortIcon>
+                <th pSortableColumn="description" style="width:15%">Descripción <p-sortIcon field="description"></p-sortIcon>
                 </th>
-                <th pSortableColumn="institution" style="width:20%">Institución <p-sortIcon field="institution"></p-sortIcon></th>
-                <th pSortableColumn="duration" style="width:20%">Duración <p-sortIcon field="duration"></p-sortIcon></th>
+                <th pSortableColumn="institution" style="width:15%">Institución <p-sortIcon field="institution"></p-sortIcon></th>
+                <th pSortableColumn="duration" style="width:15%">Duración <p-sortIcon field="duration"></p-sortIcon></th>
                 <th pSortableColumn="date" style="width:10%">Fecha <p-sortIcon field="date"></p-sortIcon>
                 </th>
+                <th style="width:3%">Editar <p-sortIcon field="edit"></p-sortIcon></th>
+                <th style="width:3%">Eliminar <p-sortIcon field="delete"></p-sortIcon></th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-course>
@@ -23,6 +25,12 @@
                 <td>{{course.institution}}</td>
                 <td>{{course.duration}}</td>
                 <td>{{course.date}}</td>
+                <td>
+                    <p-button icon="pi pi-file-edit" styleClass="p-button-rounded" (onClick)="handleModify(course)"></p-button>
+                </td>
+                <td>
+                    <p-button icon="pi pi-trash" styleClass="p-button-rounded" (onClick)="handleDelete(course)"></p-button>
+                </td>
             </tr>
         </ng-template>
     </p-table>

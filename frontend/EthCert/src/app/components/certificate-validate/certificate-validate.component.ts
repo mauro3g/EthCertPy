@@ -29,7 +29,7 @@ export class CertificateValidateComponent extends DateFormatterUtil {
 
       const contentDataURL = canvas.toDataURL('image/png');
       let pdf = new jspdf('l', 'px', 'letter'); // A4 size page of PDF
-      var position = 60;
+      var position = 10;
       pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
       pdf.save('new-file.pdf'); // Generated PDF
     });

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { SortEvent } from 'primeng/api';
 import { IStudent } from 'src/app/interfaces/interfaces';
 
@@ -8,7 +8,17 @@ import { IStudent } from 'src/app/interfaces/interfaces';
   styleUrls: ['./students-list.component.scss']
 })
 export class StudentsListComponent {
+  @Output() modify: EventEmitter<any> = new EventEmitter();
+  @Output() delete: EventEmitter<any> = new EventEmitter();
   @Input() students: IStudent[] = [];
+
+  handleModify(student: IStudent) {
+    this.modify.emit(student);
+  }
+
+  handleDelete(student: IStudent) {
+    this.delete.emit(student);
+  }
 
   customSort(event: SortEvent) {
       event.data?.sort((data1, data2) => {

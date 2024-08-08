@@ -1,3 +1,43 @@
-.table-list {
-    margin-top: 20px;
+* {
+  margin: 0;
+}
+
+nav {
+  height: 70px;
+  background-color: green;
+}
+.container {
+  display: flex;
+  height: calc(100vh - 70px);
+}
+.container .main-body {
+  width: 100%;
+}
+.container aside {
+  width: 0;
+  overflow-y: auto;
+  transition: all 0.5s;
+  background-color: #f8f9fa;
+}
+/*Im using hover event to expand sidebar for example, you can use JS to handle click event*/
+.container aside.expanding {
+  width: 200px;
+}
+
+.init-buttons-container{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.init-buttons{
+    display: grid;
+    grid-template-columns: 300px 300px;
+    grid-template-rows: 100px;
+    gap: 20px;
+    .p-button{
+        color: #3B82F6 !important;
+        background-color: white !important;
+    }
 }

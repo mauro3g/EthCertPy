@@ -6,7 +6,7 @@ import {
   IReportRequest,
   IStudent,
 } from 'src/app/interfaces/interfaces';
-import { ConfirmationService, MegaMenuItem } from 'primeng/api';
+import { ConfirmationService, MenuItem } from 'primeng/api';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { MessageService } from 'primeng/api';
 import { StudentsFormComponent } from 'src/app/components/students-form/students-form.component';
@@ -25,7 +25,7 @@ import { CertificateValidateModalComponent } from 'src/app/components/certificat
   providers: [DialogService, MessageService, ConfirmationService],
 })
 export class HomeComponent implements OnInit {
-  items: MegaMenuItem[] = [];
+  items: MenuItem[] = [];
   students: IStudent[] = [];
   certificates: ICertificate[] = [];
   courses: ICourse[] = [];
@@ -34,9 +34,18 @@ export class HomeComponent implements OnInit {
   showCertificates: boolean = false;
   showCourses: boolean = false;
   showSuccess: boolean = false;
+  showSuccessModify: boolean = false;
+  showSuccessDelete: boolean = false;
+  showNotAllowed: boolean = false;
   showError: boolean = false;
   loading = new BehaviorSubject<boolean>(false);
   loadingTables = new BehaviorSubject<boolean>(true);
+  isExpanding = false;
+  hideButtons = false;
+
+  toggleSideBar() {
+    this.isExpanding = !this.isExpanding;
+  }
 
   constructor(
     private readonly certificateService: CertificatesServiceService,
@@ -56,92 +65,64 @@ export class HomeComponent implements OnInit {
         label: 'Certificados',
         icon: 'pi pi-fw pi-book',
         items: [
-          [
-            {
-              label: 'Certificados',
-              items: [
-                {
-                  label: 'Ver certificados',
-                  icon: 'pi pi-list',
-                  command: () => this.showCertificateList(),
-                },
-                {
-                  label: 'Crear certificado',
-                  icon: 'pi pi-plus',
-                  command: () => this.showCertificateForm(),
-                },
-              ],
-            },
-          ],
+          {
+            label: 'Ver certificados',
+            icon: 'pi pi-list',
+            command: () => this.showCertificateList(),
+          },
+          {
+            label: 'Crear certificado',
+            icon: 'pi pi-plus',
+            command: () => this.showCertificateForm(),
+          },
         ],
       },
       {
         label: 'Estudiantes',
         icon: 'pi pi-fw pi-user',
         items: [
-          [
-            {
-              label: 'Estudiantes',
-              items: [
-                {
-                  label: 'Ver estudiantes',
-                  icon: 'pi pi-list',
-                  command: () => this.showStudentList(),
-                },
-                {
-                  label: 'Registrar estudiante',
-                  icon: 'pi pi-plus',
-                  command: () => this.showStudentForm(),
-                },
-                {
-                  label: 'Subir archivo',
-                  icon: 'pi pi-file',
-                  command: () => this.showStudentUpload(),
-                },
-              ],
-            },
-          ],
+          {
+            label: 'Ver estudiantes',
+            icon: 'pi pi-list',
+            command: () => this.showStudentList(),
+          },
+          {
+            label: 'Registrar estudiante',
+            icon: 'pi pi-plus',
+            command: () => this.showStudentForm(),
+          },
+          {
+            label: 'Subir archivo',
+            icon: 'pi pi-file',
+            command: () => this.showStudentUpload(),
+          },
         ],
       },
       {
         label: 'Plantillas',
         icon: 'pi pi-fw pi-file-edit',
         items: [
-          [
-            {
-              label: 'Plantillas',
-              items: [
-                {
-                  label: 'Ver plantillas',
-                  icon: 'pi pi-list',
-                  command: () => this.showCoursesList(),
-                },
-                {
-                  label: 'Crear plantilla',
-                  icon: 'pi pi-plus',
-                  command: () => this.showCourseForm(),
-                },
-              ],
-            },
-          ],
+          {
+            label: 'Ver plantillas',
+            icon: 'pi pi-list',
+            command: () => this.showCoursesList(),
+          },
+          {
+            label: 'Crear plantilla',
+            icon: 'pi pi-plus',
+            command: () => this.showCourseForm(),
+          },
         ],
       },
       {
         label: 'Reportes',
         icon: 'pi pi-fw pi-list',
         items: [
-          [
-            {
-              label: 'Reportes',
-              items: [
-                {
-                  label: 'Descargar Reporte',
-                  icon: 'pi pi-file',
-                  command: () => this.showReportForm(),
-                },
-              ],
-            },
-          ],
+          {
+            label: 'Descargar Reporte',
+            icon: 'pi pi-file',
+            command: () => this.showReportForm(),
+          },
         ],
       },
     ];
@@ -157,18 +138,21 @@ export class HomeComponent implements OnInit {
     this.showStudents = true;
     this.showCertificates = false;
     this.showCourses = false;
+    this.hideButtons = true;
   }
 
   showCoursesList() {
     this.showStudents = false;
     this.showCertificates = false;
     this.showCourses = true;
+    this.hideButtons = true;
   }
 
   showCertificateList() {
     this.showStudents = false;
     this.showCertificates = true;
     this.showCourses = false;
+    this.hideButtons = true;
   }
 
   getCertificates() {
@@ -178,7 +162,6 @@ export class HomeComponent implements OnInit {
         if (response.length > 0) {
           response.splice(0, 1);
           this.certificates = response;
-          this.showCertificateList();
         }
       });
   }
@@ -199,11 +182,35 @@ export class HomeComponent implements OnInit {
   registerStudent(data: IStudent) {
     this.loading.next(true);
     this.certificateService
-      .create_student([data])
+      .modify_student(data)
       .subscribe((response: string) => {
         this.loading.next(false);
         this.getStudents();
-        this.showSuccess = true;
+        this.showSuccessModify = true;
+        console.log(response);
+      });
+  }
+
+  deleteStudent(data: IStudent) {
+    this.loading.next(true);
+    this.certificateService
+      .delete_student(data)
+      .subscribe((response: string) => {
+        this.loading.next(false);
+        this.getStudents();
+        this.showSuccessDelete = true;
+        console.log(response);
+      });
+  }
+
+  updateStudent(data: IStudent) {
+    this.loading.next(true);
+    this.certificateService
+      .modify_student(data)
+      .subscribe((response: string) => {
+        this.loading.next(false);
+        this.getStudents();
+        this.showSuccessModify = true;
         console.log(response);
       });
   }
@@ -228,6 +235,30 @@ export class HomeComponent implements OnInit {
         this.loading.next(false);
         this.getCourses();
         this.showSuccess = true;
+        console.log(response);
+      });
+  }
+
+  deleteCourse(data: ICourse) {
+    this.loading.next(true);
+    this.certificateService
+      .delete_course(data)
+      .subscribe((response: string) => {
+        this.loading.next(false);
+        this.getCourses();
+        this.showSuccessDelete = true;
+        console.log(response);
+      });
+  }
+
+  updateCourse(data: ICourse) {
+    this.loading.next(true);
+    this.certificateService
+      .modify_course(data)
+      .subscribe((response: string) => {
+        this.loading.next(false);
+        this.getCourses();
+        this.showSuccessModify = true;
         console.log(response);
       });
   }
@@ -269,6 +300,8 @@ export class HomeComponent implements OnInit {
   showStudentForm() {
     this.ref = this.dialogService.open(StudentsFormComponent, {
       data: {
+        edit: false,
+        currentStudent: undefined,
         loading: this.loading.value,
         students: this.students,
         registerData: (data: IStudent) => this.registerStudent(data),
@@ -278,6 +311,26 @@ export class HomeComponent implements OnInit {
       contentStyle: { overflow: 'auto' },
       baseZIndex: 10000,
     });
+  }
+
+  showStudentFormEdit(student: IStudent) {
+    if (!this.checkEmmitedStudent(student)) {
+      this.ref = this.dialogService.open(StudentsFormComponent, {
+        data: {
+          edit: true,
+          currentStudent: student,
+          loading: this.loading.value,
+          students: this.students,
+          registerData: (data: IStudent) => this.updateStudent(data),
+        },
+        header: 'Editar estudiante',
+        width: '70%',
+        contentStyle: { overflow: 'auto' },
+        baseZIndex: 10000,
+      });
+    } else {
+      this.showNotAllowed = true;
+    }
   }
 
   showStudentUpload() {
@@ -296,6 +349,8 @@ export class HomeComponent implements OnInit {
   showCourseForm() {
     this.ref = this.dialogService.open(CourseFormComponent, {
       data: {
+        edit: true,
+        currentCourse: undefined,
         loading: this.loading.value,
         templates: this.courses,
         registerData: (data: ICourse) => this.registerCourse(data),
@@ -305,6 +360,26 @@ export class HomeComponent implements OnInit {
       contentStyle: { overflow: 'auto' },
       baseZIndex: 10000,
     });
+  }
+
+  showCourseFormEdit(course: ICourse) {
+    if (!this.checkEmmitedCourse(course)) {
+      this.ref = this.dialogService.open(CourseFormComponent, {
+        data: {
+          edit: true,
+          currentCourse: course,
+          loading: this.loading.value,
+          templates: this.courses,
+          registerData: (data: ICourse) => this.updateCourse(data),
+        },
+        header: 'Editar plantilla de curso',
+        width: '70%',
+        contentStyle: { overflow: 'auto' },
+        baseZIndex: 10000,
+      });
+    } else {
+      this.showNotAllowed = true;
+    }
   }
 
   showCertificateForm() {
@@ -358,6 +433,7 @@ export class HomeComponent implements OnInit {
       target: event.target as EventTarget,
       message: 'Quieres cerrar sesión?',
       icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Si',
       accept: () => {
         // Store login information in local storage
         localStorage.setItem('isLoggedIn', '');
@@ -365,5 +441,50 @@ export class HomeComponent implements OnInit {
         this.router.navigate(['/login']);
       },
     });
+  }
+
+  confirmDeleteStudent(data: IStudent) {
+    if (!this.checkEmmitedStudent(data)) {
+      this.confirmationService.confirm({
+        message: 'Seguro que desea eliminar el estudiante?',
+        header: 'Confirmación',
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+          this.deleteStudent(data);
+        },
+        acceptLabel: 'Si',
+        key: 'deleteDialog',
+      });
+    } else {
+      this.showNotAllowed = true;
+    }
+  }
+
+  confirmDeleteCourse(data: ICourse) {
+    if (!this.checkEmmitedCourse(data)) {
+      this.confirmationService.confirm({
+        message: 'Seguro que desea eliminar la plantilla?',
+        header: 'Confirmación',
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+          this.deleteCourse(data);
+        },
+        key: 'deleteDialog',
+      });
+    } else {
+      this.showNotAllowed = true;
+    }
+  }
+
+  checkEmmitedStudent(student: IStudent) {
+    return Boolean(
+      this.certificates.find((cert) => cert.student.dni === student.dni)
+    );
+  }
+
+  checkEmmitedCourse(course: ICourse) {
+    return Boolean(
+      this.certificates.find((cert) => cert.course.title === course.title)
+    );
   }
 }

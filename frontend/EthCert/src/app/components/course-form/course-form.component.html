@@ -29,6 +29,8 @@
     </form>
 </div>
 <div class="modal-footer buttons">
-    <p-button label="Registrar" [loading]="config.data.loading" (click)="submit()"
+    <p-button *ngIf="!edit" label="Registrar" [loading]="config.data.loading" (click)="submit()"
+        [disabled]="formCourse.invalid"></p-button>
+    <p-button *ngIf="edit" label="Editar" [loading]="config.data.loading" (click)="submit()"
         [disabled]="formCourse.invalid"></p-button>
 </div>

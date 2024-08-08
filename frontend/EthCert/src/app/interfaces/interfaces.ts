@@ -10,6 +10,9 @@ export interface IStudent {
   name: string;
   surname: string;
   dni: string;
+  country?:string
+  phone?:string
+  direction?:string
 }
 
 export interface ICourse {

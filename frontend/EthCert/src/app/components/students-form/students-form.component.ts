@@ -24,17 +24,34 @@ export class StudentsFormComponent {
   loading: boolean = false;
   invalidCi: boolean = false;
   dniInUse: boolean = false;
+  edit: boolean = false;
 
   constructor(
     public ref: DynamicDialogRef,
     public config: DynamicDialogConfig,
     private readonly fb: UntypedFormBuilder
   ) {
-    this.formStudent = this.fb.group({
-      name: ['', [Validators.required]],
-      surname: ['', [Validators.required]],
-      dni: ['', [Validators.required, this.dniValidator()]],
-    });
+    const currentStudent = this.config.data.currentStudent;
+    this.edit = this.config.data.edit;
+    if (this.edit && currentStudent) {
+      this.formStudent = this.fb.group({
+        name: [currentStudent.name, [Validators.required]],
+        surname: [currentStudent.surname, [Validators.required]],
+        dni: [currentStudent.dni, [Validators.required, this.dniValidator()]],
+        country: [currentStudent.country, []],
+        phone: [currentStudent.phone, []],
+        direction: [currentStudent.direction, []],
+      });
+    } else {
+      this.formStudent = this.fb.group({
+        name: ['', [Validators.required]],
+        surname: ['', [Validators.required]],
+        dni: ['', [Validators.required, this.dniValidator()]],
+        country: ['', []],
+        phone: ['', []],
+        direction: ['', []],
+      });
+    }
   }
 
   dniValidator(): ValidatorFn {

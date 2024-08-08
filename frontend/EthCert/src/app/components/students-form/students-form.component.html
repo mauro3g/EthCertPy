@@ -14,9 +14,21 @@
             <span *ngIf="dniInUse" style="color: red;">Identificación ya registrada.</span>
             <span *ngIf="invalidCi && formStudent.controls['dni'].touched"  style="color: red;">Identificación no es una cédula ecuatoriana.</span>
         </div>
-
+        <div class="flex flex-column gap-2 mb-4">
+            <label htmlFor="country" class="form-label">Nacionalidad</label>
+            <input type="text" pInputText class="form-control" id="country" placeholder="" formControlName="country">
+        </div>
+        <div class="flex flex-column gap-2 mb-4">
+            <label htmlFor="direction" class="form-label">Teléfono</label>
+            <input type="text" pInputText class="form-control" id="phone" placeholder="" formControlName="phone">
+        </div>
+        <div class="flex flex-column gap-2 mb-4">
+            <label htmlFor="direction" class="form-label">Dirección</label>
+            <input type="text" pInputText class="form-control" id="direction" placeholder="" formControlName="direction">
+        </div>
     </form>
 </div>
 <div class="modal-footer">
-    <p-button label="Registrar" [loading]="config.data.loading" (click)="submit()" [disabled]="formStudent.invalid"></p-button>
+    <p-button *ngIf="!edit" label="Registrar" [loading]="config.data.loading" (click)="submit()" [disabled]="formStudent.invalid"></p-button>
+    <p-button *ngIf="edit" label="Editar" [loading]="config.data.loading" (click)="submit()" [disabled]="formStudent.invalid"></p-button>
 </div>
