@@ -37,11 +37,24 @@ db_dependency = Annotated[Session, Depends(get_db)]
 
 def generate_student_course_report(writer, certificates, input_value):
     writer.writerow(["curso", input_value.course])
-    writer.writerow(["dni","nombre", "apellido"])
+    writer.writerow(["dni","nombre", "apellido", "curso", "duracion", "institucion", "hash", "id","emitido", "expira"])
     
     for cert in certificates:
         if cert["course"]["title"] == input_value.course:
-            writer.writerow([cert["student"]["dni"], cert["student"]["name"], cert["student"]["surname"]])
+            date_issued = datetime.fromtimestamp(cert["issuedDate"]/1000.0)
+            date_expired = datetime.fromtimestamp(cert["expireDate"]/1000.0)
+            writer.writerow([
+                cert["student"]["dni"],
+                cert["student"]["name"],
+                cert["student"]["surname"],
+                cert["course"]["title"],
+                cert["course"]["duration"],
+                cert["course"]["institution"],
+                cert["hash"],
+                cert["idcertificate"],
+                date_issued.strftime("%Y-%m-%d %H:%M:%S"),
+                date_expired.strftime("%Y-%m-%d %H:%M:%S")
+            ])
 
 def generate_certificate_student_report(writer, certificates, input_value):
     writer.writerow(["estudiante", input_value.student])

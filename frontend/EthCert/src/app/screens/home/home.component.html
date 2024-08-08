@@ -75,6 +75,9 @@
                 (viewCertificate)="showCertificateImage($event)"></app-certificate-list>
             <p-toast></p-toast>
         </div>
+        <div *ngIf="loadingTables" class="w-full text-center">
+            <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
+        </div>
     </div>
     <div>
         <p-dialog [(visible)]="showSuccess" position="bottom-right" header="Resultado">

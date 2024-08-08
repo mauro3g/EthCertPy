@@ -39,7 +39,7 @@ export class HomeComponent implements OnInit {
   showNotAllowed: boolean = false;
   showError: boolean = false;
   loading = new BehaviorSubject<boolean>(false);
-  loadingTables = new BehaviorSubject<boolean>(true);
+  loadingTables = false;
   isExpanding = false;
   hideButtons = false;
 
@@ -56,6 +56,7 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.loadingTables=true;
     this.getCertificates();
     this.getStudents();
     this.getCourses();
@@ -162,20 +163,23 @@ export class HomeComponent implements OnInit {
         if (response.length > 0) {
           response.splice(0, 1);
           this.certificates = response;
+          console.log(this.certificates)
         }
+        this.loadingTables=false;
       });
   }
 
   getStudents() {
     this.certificateService.get_students().subscribe((response: IStudent[]) => {
       this.students = response;
+      this.loadingTables=false;
     });
   }
 
   getCourses() {
     this.certificateService.get_courses().subscribe((response: ICourse[]) => {
       this.courses = response;
-      this.loading.next(false);
+      this.loadingTables=false;
     });
   }
 
@@ -185,6 +189,7 @@ export class HomeComponent implements OnInit {
       .create_student([data])
       .subscribe((response: string) => {
         this.loading.next(false);
+        this.loadingTables=true;
         this.getStudents();
         this.showSuccessModify = true;
         console.log(response);
@@ -197,6 +202,7 @@ export class HomeComponent implements OnInit {
       .delete_student(data)
       .subscribe((response: string) => {
         this.loading.next(false);
+        this.loadingTables=true;
         this.getStudents();
         this.showSuccessDelete = true;
         console.log(response);
@@ -209,6 +215,7 @@ export class HomeComponent implements OnInit {
       .modify_student(data)
       .subscribe((response: string) => {
         this.loading.next(false);
+        this.loadingTables=true;
         this.getStudents();
         this.showSuccessModify = true;
         console.log(response);
@@ -221,6 +228,7 @@ export class HomeComponent implements OnInit {
       .upload_students(file)
       .subscribe((response: string) => {
         this.loading.next(false);
+        this.loadingTables=true;
         this.getStudents();
         this.showSuccess = true;
         console.log(response);
@@ -233,6 +241,7 @@ export class HomeComponent implements OnInit {
       .create_course(data)
       .subscribe((response: string) => {
         this.loading.next(false);
+        this.loadingTables=true;
         this.getCourses();
         this.showSuccess = true;
         console.log(response);
@@ -245,6 +254,7 @@ export class HomeComponent implements OnInit {
       .delete_course(data)
       .subscribe((response: string) => {
         this.loading.next(false);
+        this.loadingTables=true;
         this.getCourses();
         this.showSuccessDelete = true;
         console.log(response);
@@ -257,6 +267,7 @@ export class HomeComponent implements OnInit {
       .modify_course(data)
       .subscribe((response: string) => {
         this.loading.next(false);
+        this.loadingTables=true;
         this.getCourses();
         this.showSuccessModify = true;
         console.log(response);
@@ -269,6 +280,7 @@ export class HomeComponent implements OnInit {
       .create_certificate(data)
       .subscribe((response: string) => {
         this.loading.next(false);
+        this.loadingTables=true;
         this.getCertificates();
         this.showSuccess = true;
         console.log(response);
