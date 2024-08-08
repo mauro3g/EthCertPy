@@ -10,6 +10,9 @@
                     <th>Nombre</th>
                     <th>Apellido</th>
                     <th>Identificación</th>
+                    <th>Nacionalidad</th>
+                    <th>teléfono</th>
+                    <th>dirección</th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-studentExample>
@@ -17,6 +20,9 @@
                     <td>{{ studentExample.name }}</td>
                     <td>{{ studentExample.surname }}</td>
                     <td>{{ studentExample.dni }}</td>
+                    <td>{{ studentExample.country }}</td>
+                    <td>{{ studentExample.phone }}</td>
+                    <td>{{ studentExample.direction }}</td>
                 </tr>
             </ng-template>
         </p-table>

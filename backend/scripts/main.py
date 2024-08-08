@@ -202,8 +202,8 @@ async def upload_csv_students(file: UploadFile, db: db_dependency):
     for row in csv_reader:
         # Assuming the CSV has columns: column1, column2, column3
         if row[0] != 'nombre' and row[0] != 'name':
-            data.append(InputStudent(name=row[0], surname=row[1], dni=row[2]))
-    student_list = [Student(name=value.name, surname=value.surname, dni=value.dni) for value in data]
+            data.append(InputStudent(name=row[0], surname=row[1], dni=row[2], country=row[3], phone=row[4], direction=row[5]))
+    student_list = [Student(name=value.name, surname=value.surname, dni=value.dni, country=value.country, phone=value.phone, direction=value.direction) for value in data]
     #search for registered dni
     dni_values = [student.dni for student in student_list]
     # Search for coincidences of the dni values in the database

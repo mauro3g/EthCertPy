@@ -20,16 +20,25 @@ export class StudentsUploadComponent implements OnInit {
       name: 'Juan',
       surname: 'Peres',
       dni: '1745652312',
+      country: 'Ecuatoriana',
+      phone: '0925689744',
+      direction: 'Sangolqui'
     });
     this.studentExamples.push({
       name: 'Maria',
       surname: 'Morales',
       dni: '1986552312',
+      country: 'Ecuatoriana',
+      phone: '0987456320',
+      direction: 'Quito'
     });
     this.studentExamples.push({
       name: 'Alex',
       surname: 'Rodriguez',
       dni: '0956478931',
+      country: 'Ecuatoriana',
+      phone: '0986547890',
+      direction: 'Cuenca'
     });
   }
 

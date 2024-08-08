@@ -182,7 +182,7 @@ export class HomeComponent implements OnInit {
   registerStudent(data: IStudent) {
     this.loading.next(true);
     this.certificateService
-      .modify_student(data)
+      .create_student([data])
       .subscribe((response: string) => {
         this.loading.next(false);
         this.getStudents();
@@ -304,7 +304,10 @@ export class HomeComponent implements OnInit {
         currentStudent: undefined,
         loading: this.loading.value,
         students: this.students,
-        registerData: (data: IStudent) => this.registerStudent(data),
+        registerData: (data: IStudent) => {
+          this.registerStudent(data);
+          this.ref?.close();
+        },
       },
       header: 'Registrar estudiante',
       width: '70%',
@@ -321,8 +324,10 @@ export class HomeComponent implements OnInit {
           currentStudent: student,
           loading: this.loading.value,
           students: this.students,
-          registerData: (data: IStudent) =>
-            this.updateStudent({ ...data, idstudent: student.idstudent }),
+          registerData: (data: IStudent) => {
+            this.updateStudent({ ...data, idstudent: student.idstudent });
+            this.ref?.close();
+          },
         },
         header: 'Editar estudiante',
         width: '70%',
@@ -338,7 +343,10 @@ export class HomeComponent implements OnInit {
     this.ref = this.dialogService.open(StudentsUploadComponent, {
       data: {
         loading: this.loading.value,
-        uploadStudent: (data: File) => this.uploadStudent(data),
+        uploadStudent: (data: File) => {
+          this.uploadStudent(data);
+          this.ref?.close();
+        },
       },
       header: 'Subir archivo de estudiantes',
       width: '70%',
@@ -354,7 +362,10 @@ export class HomeComponent implements OnInit {
         currentCourse: undefined,
         loading: this.loading.value,
         templates: this.courses,
-        registerData: (data: ICourse) => this.registerCourse(data),
+        registerData: (data: ICourse) => {
+          this.registerCourse(data);
+          this.ref?.close();
+        },
       },
       header: 'Registrar plantilla de curso',
       width: '70%',
@@ -371,8 +382,10 @@ export class HomeComponent implements OnInit {
           currentCourse: course,
           loading: this.loading.value,
           templates: this.courses,
-          registerData: (data: ICourse) =>
-            this.updateCourse({ ...data, idcourse: course.idcourse }),
+          registerData: (data: ICourse) => {
+            this.updateCourse({ ...data, idcourse: course.idcourse });
+            this.ref?.close();
+          },
         },
         header: 'Editar plantilla de curso',
         width: '70%',
@@ -390,7 +403,10 @@ export class HomeComponent implements OnInit {
         students: this.students,
         templates: this.courses,
         loading: this.loading.value,
-        registerData: (data: ICertificate) => this.registerCertificate(data),
+        registerData: (data: ICertificate) => {
+          this.registerCertificate(data);
+          this.ref?.close();
+        },
       },
       header: 'Registrar certificado',
       height: '80%',
