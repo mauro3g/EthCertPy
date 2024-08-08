@@ -165,7 +165,7 @@ async def create_students(input_value: List[InputStudent], db: db_dependency):
 
 @app.put("/student/{student_id}", status_code=status.HTTP_200_OK)
 async def update_student(student_id: int, input_value: InputStudent, db: db_dependency):
-    student = db.query(Student).filter(Student.id == student_id).first()
+    student = db.query(Student).filter(Student.idstudent == student_id).first()
     if not student:
         raise HTTPException(status_code=404, detail="Student not found")
     
@@ -177,7 +177,7 @@ async def update_student(student_id: int, input_value: InputStudent, db: db_depe
 
 @app.delete("/student/{student_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_student(student_id: int, db: db_dependency):
-    student = db.query(Student).filter(Student.id == student_id).first()
+    student = db.query(Student).filter(Student.idstudent == student_id).first()
     if not student:
         raise HTTPException(status_code=404, detail="Student not found")
     
@@ -227,7 +227,7 @@ async def create_course(input_value: InputCourse, db: db_dependency):
 
 @app.put("/course/{course_id}", status_code=status.HTTP_200_OK)
 async def update_course(course_id: int, input_value: InputCourse, db: db_dependency):
-    course = db.query(Course).filter(Course.id == course_id).first()
+    course = db.query(Course).filter(Course.idcourse == course_id).first()
     if not course:
         raise HTTPException(status_code=404, detail="Course not found")
     
@@ -239,7 +239,7 @@ async def update_course(course_id: int, input_value: InputCourse, db: db_depende
 
 @app.delete("/course/{course_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_course(course_id: int, db: db_dependency):
-    course = db.query(Course).filter(Course.id == course_id).first()
+    course = db.query(Course).filter(Course.idcourse == course_id).first()
     if not course:
         raise HTTPException(status_code=404, detail="course not found")
     
