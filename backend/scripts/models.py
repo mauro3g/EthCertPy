@@ -18,6 +18,10 @@ class Student(Base):
     name = Column(String(32))
     surname = Column(String(32))
     dni = Column(String(13))
+    country = Column(String(30))
+    phone = Column(String(30))
+    direction = Column(String(30))
+    
     
 class Course(Base):
     __tablename__="course"
@@ -42,8 +46,11 @@ class InputStudent(BaseModel):
     name:str
     surname: str
     dni:str
+    country:str
+    phone:str
+    direction:str
 
-class InputStudent2(BaseModel):
+class InputStudentCert(BaseModel):
     idstudent:int
     name:str
     surname: str
@@ -56,22 +63,13 @@ class InputCourse(BaseModel):
     duration:str
     date:str
 
-class InputCourse2(BaseModel):
-    idcourse:int
-    title:str
-    description:str
-    institution:str
-    duration:str
-    date:str
-
-
 class InputCertificate(BaseModel):
     idcertificate:int
     issuedDate: int
     expireDate: int
     link: str
     hash: str
-    student:InputStudent2
+    student:InputStudentCert
     course: InputCourse
     
 class InputReportRequest(BaseModel):

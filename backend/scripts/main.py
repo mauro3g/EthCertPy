@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from typing import Annotated
 from backend.scripts.database import SessionLocal
-from backend.scripts.models import InputReportRequest, Users, Student, Course, Login, InputCourse, InputStudent, InputStudent2, InputCertificate 
+from backend.scripts.models import InputReportRequest, Users, Student, Course, Login, InputCourse, InputStudent, InputCertificate 
 from backend.scripts.web3Con import getCertificateContract, caller
 from sqlalchemy.orm import Session
 from typing import List
@@ -37,50 +37,50 @@ db_dependency = Annotated[Session, Depends(get_db)]
 
 def generate_student_course_report(writer, certificates, input_value):
     writer.writerow(["curso", input_value.course])
-    writer.writerow(["nombre", "apellido", "dni"])
+    writer.writerow(["dni","nombre", "apellido"])
     
     for cert in certificates:
         if cert["course"]["title"] == input_value.course:
-            writer.writerow([cert["student"]["name"], cert["student"]["surname"], cert["student"]["dni"]])
+            writer.writerow([cert["student"]["dni"], cert["student"]["name"], cert["student"]["surname"]])
 
 def generate_certificate_student_report(writer, certificates, input_value):
     writer.writerow(["estudiante", input_value.student])
-    writer.writerow(["id", "emitido", "expira", "hash", "curso", "institucion", "duracion", "nombre", "apellido", "dni"])
+    writer.writerow(["dni", "nombre", "apellido" , "curso", "duracion", "institucion", "hash", "id","emitido", "expira"])
     for cert in certificates:
         if cert["student"]["dni"] == input_value.student:
             date_issued = datetime.fromtimestamp(cert["issuedDate"]/1000.0)
             date_expired = datetime.fromtimestamp(cert["expireDate"]/1000.0)
             writer.writerow([
-                cert["idcertificate"],
-                date_issued.strftime("%Y-%m-%d %H:%M:%S"),
-                date_expired.strftime("%Y-%m-%d %H:%M:%S"),
-                cert["hash"],
-                cert["course"]["title"],
-                cert["course"]["institution"],
-                cert["course"]["duration"],
+                cert["student"]["dni"],
                 cert["student"]["name"],
                 cert["student"]["surname"],
-                cert["student"]["dni"]
+                cert["course"]["title"],
+                cert["course"]["duration"],
+                cert["course"]["institution"],
+                cert["hash"],
+                cert["idcertificate"],
+                date_issued.strftime("%Y-%m-%d %H:%M:%S"),
+                date_expired.strftime("%Y-%m-%d %H:%M:%S")
             ])
 
 def generate_certificate_course_report(writer, certificates, input_value):
     writer.writerow(["curso", input_value.course])
-    writer.writerow(["id", "emitido", "expira", "hash", "curso", "institucion", "duracion", "nombre", "apellido", "dni"])
+    writer.writerow(["dni", "nombre", "apellido", "curso", "duracion", "institucion", "hash", "id", "emitido", "expira" ])
     for cert in certificates:
         if cert["course"]["title"] == input_value.course:
             date_issued = datetime.fromtimestamp(cert["issuedDate"]/1000.0)
             date_expired = datetime.fromtimestamp(cert["expireDate"]/1000.0)
             writer.writerow([
-                cert["idcertificate"],
-                date_issued.strftime("%Y-%m-%d %H:%M:%S"),
-                date_expired.strftime("%Y-%m-%d %H:%M:%S"),
-                cert["hash"],
-                cert["course"]["title"],
-                cert["course"]["institution"],
-                cert["course"]["duration"],
+                cert["student"]["dni"],
                 cert["student"]["name"],
                 cert["student"]["surname"],
-                cert["student"]["dni"]
+                cert["course"]["title"],
+                cert["course"]["duration"],
+                cert["course"]["institution"],
+                cert["hash"],
+                cert["idcertificate"],
+                date_issued.strftime("%Y-%m-%d %H:%M:%S"),
+                date_expired.strftime("%Y-%m-%d %H:%M:%S")
             ])
 
 def generate_course_institution_report(writer, certificates, input_value):
@@ -163,6 +163,28 @@ async def create_students(input_value: List[InputStudent], db: db_dependency):
     db.commit()
     return "Los registros se realizaron exitosamente"
 
+@app.put("/student/{student_id}", status_code=status.HTTP_200_OK)
+async def update_student(student_id: int, input_value: InputStudent, db: db_dependency):
+    student = db.query(Student).filter(Student.id == student_id).first()
+    if not student:
+        raise HTTPException(status_code=404, detail="Student not found")
+    
+    for key, value in input_value.dict().items():
+        setattr(student, key, value)
+    
+    db.commit()
+    return {"message": "Student record updated successfully"}
+
+@app.delete("/student/{student_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_student(student_id: int, db: db_dependency):
+    student = db.query(Student).filter(Student.id == student_id).first()
+    if not student:
+        raise HTTPException(status_code=404, detail="Student not found")
+    
+    db.delete(student)
+    db.commit()
+    return {"message": "Student record deleted successfully"}
+
 @app.get("/student-list/", status_code=status.HTTP_200_OK)
 async def get_students(db: db_dependency):
     result = db.query(Student).all()
@@ -202,6 +224,28 @@ async def create_course(input_value: InputCourse, db: db_dependency):
     db.add(new_course)
     db.commit()
     return "El curso se registro exitosamente"
+
+@app.put("/course/{course_id}", status_code=status.HTTP_200_OK)
+async def update_course(course_id: int, input_value: InputCourse, db: db_dependency):
+    course = db.query(Course).filter(Course.id == course_id).first()
+    if not course:
+        raise HTTPException(status_code=404, detail="Course not found")
+    
+    for key, value in input_value.dict().items():
+        setattr(course, key, value)
+    
+    db.commit()
+    return {"message": "Course record updated successfully"}
+
+@app.delete("/course/{course_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_course(course_id: int, db: db_dependency):
+    course = db.query(Course).filter(Course.id == course_id).first()
+    if not course:
+        raise HTTPException(status_code=404, detail="course not found")
+    
+    db.delete(course)
+    db.commit()
+    return {"message": "course record deleted successfully"}
 
 @app.get("/course-list/", status_code=status.HTTP_200_OK)
 async def get_courses(db:db_dependency):
